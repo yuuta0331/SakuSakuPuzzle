@@ -25,9 +25,9 @@ export default class TitleScreen extends Stage {
             image: loader.getImage('title_background'),
         });
 
-        game.world.addChild(new BitmapText(game.viewport.width / 2, game.viewport.height / 2 - game.viewport.height / 4, {
+        game.world.addChild(new BitmapText(game.viewport.width / 2, game.viewport.height / 2 - game.viewport.height / 4 - 100, {
             font: "funwari-round_brown",
-            size: 1.5,
+            size: 3.2,
             textBaseline: "middle",
             textAlign: "center",
             fillStyle: "white",
@@ -39,10 +39,10 @@ export default class TitleScreen extends Stage {
         this.menuItems.forEach(item => game.world.removeChild(item));
 
         // 文字列の最小Y座標
-        const base_y = 260;
+        const base_y = 480;
 
         // 文字列のY座標間隔
-        const margin_y = 70;
+        const margin_y = 140;
 
         // メニュー項目の文字列
         const menuTexts = ["ぷれい", "へるぷ", "らんきんぐ", "しゅうりょう"];
@@ -84,7 +84,7 @@ export default class TitleScreen extends Stage {
 
     // メニュー項目を作成するためのヘルパーメソッド
     createMenuItem(text, x, y) {
-        const menuItem = new BitmapText(x, y, { text: text, font: "funwari-round", size: 0.8, textAlign: "center" });
+        const menuItem = new BitmapText(x, y, { text: text, font: "funwari-round", size: 1.5, textAlign: "center" });
 
         // マウスクリックイベントのリスナーを追加
         // menuItem.pointerEvent.subscribe("pointerdown", () => {

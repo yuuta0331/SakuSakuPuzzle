@@ -24,7 +24,7 @@ import { bindKeys, unbindKeys } from "./js/util/constants";
 device.onReady(() => {
 
     // initialize the display canvas once the device/browser is ready
-    if (!video.init(1218, 562,
+    if (!video.init(1920, 1080,
         {
             parent: "screen", scale: "auto",
             renderer: video.AUTO,

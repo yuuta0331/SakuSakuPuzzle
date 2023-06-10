@@ -18,6 +18,16 @@ const DataManifest = [
         type: "image",
         src: "./data/img/title_background.png"
     },
+    {
+        name: "gamemain_background",
+        type: "image",
+        src: "./data/img/game_main_background.png"
+    },
+    {
+        name: "timer_background",
+        type: "image",
+        src: "./data/img/Timer.png"
+    },
     // Font Face
     {
         name: "funwari-round",
