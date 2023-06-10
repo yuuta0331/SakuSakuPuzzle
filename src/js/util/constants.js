@@ -110,11 +110,11 @@ export const ENEMY_TILE = {
 };
 
 export function bindKeys() {
-	input.bindKey(input.KEY.ALT, "magic");
-	input.bindKey(input.KEY.Q, "damage", true);
-	input.bindKey(input.KEY.E, "magic-barrier", true);
-	input.bindKey(input.KEY.R, "magic-nebula", true);
-	input.bindKey(input.KEY.SHIFT, "barrier");
+	// input.bindKey(input.KEY.ALT, "magic");
+	// input.bindKey(input.KEY.Q, "damage", true);
+	// input.bindKey(input.KEY.E, "magic-barrier", true);
+	// input.bindKey(input.KEY.R, "magic-nebula", true);
+	// input.bindKey(input.KEY.SHIFT, "barrier");
 	input.bindKey(input.KEY.LEFT, "left");
 	input.bindKey(input.KEY.A, "left");
 	input.bindKey(input.KEY.RIGHT, "right");
@@ -124,17 +124,19 @@ export function bindKeys() {
 	input.bindKey(input.KEY.DOWN, "down");
 	input.bindKey(input.KEY.S, "down");
 	input.bindKey(input.KEY.P, "pause", true);
-	input.bindKey(input.KEY.SPACE, "bomb", true);
+	// input.bindKey(input.KEY.SPACE, "bomb", true);
+	input.bindKey(input.KEY.SPACE, "enter", true);
+	input.bindKey(input.KEY.ENTER, "enter");
 	input.bindKey(input.KEY.ESC, "exit", true);
 	input.bindKey(input.KEY.F, "fullscreen", true);
 }
 
 export function unbindKeys() {
-	input.unbindKey(input.KEY.ALT);
-	input.unbindKey(input.KEY.Q);
-	input.unbindKey(input.KEY.E);
-	input.unbindKey(input.KEY.R);
-	input.unbindKey(input.KEY.SHIFT);
+	// input.unbindKey(input.KEY.ALT);
+	// input.unbindKey(input.KEY.Q);
+	// input.unbindKey(input.KEY.E);
+	// input.unbindKey(input.KEY.R);
+	// input.unbindKey(input.KEY.SHIFT);
 	input.unbindKey(input.KEY.LEFT);
 	input.unbindKey(input.KEY.A);
 	input.unbindKey(input.KEY.RIGHT);
@@ -145,7 +147,32 @@ export function unbindKeys() {
 	input.unbindKey(input.KEY.S);
 	input.unbindKey(input.KEY.P);
 	input.unbindKey(input.KEY.SPACE);
+	input.unbindKey(input.KEY.ENTER);
 	input.unbindKey(input.KEY.ESC);
 	input.unbindKey(input.KEY.F);
 
+}
+
+export function bindGamepads() {
+        // ゲームパッドのボタンをキーボードのキーにマッピング
+        input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.UP }, input.KEY.UP);
+        input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.RIGHT }, input.KEY.RIGHT);
+        input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.DOWN }, input.KEY.DOWN);
+        input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.LEFT }, input.KEY.LEFT);
+        input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.FACE_1 }, input.KEY.ENTER);
+        input.bindGamepad(0, {type:"axes", code: input.GAMEPAD.AXES.LY, threshold: -0.1}, input.KEY.UP);
+        input.bindGamepad(0, {type:"axes", code: input.GAMEPAD.AXES.LX, threshold: 0.1}, input.KEY.RIGHT);
+        input.bindGamepad(0, {type:"axes", code: input.GAMEPAD.AXES.LY, threshold: 0.1}, input.KEY.DOWN);
+        input.bindGamepad(0, {type:"axes", code: input.GAMEPAD.AXES.LX, threshold: -0.1}, input.KEY.LEFT);
+}
+
+export function unbindGamepads() {
+	// キーボードとゲームパッドのイベントの解除
+	input.unbindGamepad(0, input.GAMEPAD.BUTTONS.UP);
+	input.unbindGamepad(0, input.GAMEPAD.BUTTONS.RIGHT);
+	input.unbindGamepad(0, input.GAMEPAD.BUTTONS.DOWN);
+	input.unbindGamepad(0, input.GAMEPAD.BUTTONS.LEFT);
+	input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_1);
+	input.unbindGamepad(0, input.GAMEPAD.AXES.LX);
+	input.unbindGamepad(0, input.GAMEPAD.AXES.LY);
 }

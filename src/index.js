@@ -71,5 +71,6 @@ device.onReady(() => {
 
         // Start the game.
         state.change(state.MENU);
+        //state.change(state.PLAY);
     });
 });

@@ -28,6 +28,11 @@ const DataManifest = [
         type: "image",
         src: "./data/img/Timer.png"
     },
+    {
+        name: "cursor",
+        type: "image",
+        src: "./data/img/cursor.png"
+    },
     // Font Face
     {
         name: "funwari-round",

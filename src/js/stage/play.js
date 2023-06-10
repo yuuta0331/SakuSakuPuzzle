@@ -1,4 +1,5 @@
 import { Stage, game, ColorLayer, ImageLayer, BitmapText, Sprite, loader, Rect, Renderable } from 'melonjs';
+import Cursor from '../entity/cursor.js';
 
 class MyRectangle extends Renderable {
     constructor(x, y, width, height, color) {
@@ -60,7 +61,22 @@ class PlayScreen extends Stage {
             textAlign: "center",
             text: "Hello World !"
         }));
+
+        this.cursor = new Cursor(game.viewport.width / 2, game.viewport.height / 2);
+        game.world.addChild(this.cursor);
     }
+
+    onDestroyEvent() {
+        game.world.removeChild(this.cursor);
+        this.cursor = null;
+    }
+
+    // update(dt) {
+    //     if (this.cursor) {
+    //         this.cursor.update(dt);
+    //     }
+    //     return super.update(dt);
+    // }
 };
 
 export default PlayScreen;

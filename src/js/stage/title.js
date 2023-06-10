@@ -1,4 +1,5 @@
 import { game, input, Stage, ColorLayer, BitmapText, Sprite, loader, state } from "melonjs";
+import { bindKeys, unbindKeys, bindGamepads, unbindGamepads } from "../util/constants";
 
 export default class TitleScreen extends Stage {
     // メニュー項目
@@ -59,27 +60,16 @@ export default class TitleScreen extends Stage {
         this.selectMenuItem(0);
 
         // キーボードのイベントをアクションとしてバインド
-        input.bindKey(input.KEY.UP, "up");
-        input.bindKey(input.KEY.DOWN, "down");
-        input.bindKey(input.KEY.ENTER, "enter");
+        bindKeys();
 
         // ゲームパッドのボタンをキーボードのキーにマッピング
-        input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.UP }, input.KEY.UP);
-        input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.DOWN }, input.KEY.DOWN);
-        input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.FACE_1 }, input.KEY.ENTER);
-
-
-
+        bindGamepads();
     }
 
     onDestroyEvent() {
         // キーボードとゲームパッドのイベントの解除
-        input.unbindKey(input.KEY.UP);
-        input.unbindKey(input.KEY.DOWN);
-        input.unbindKey(input.KEY.ENTER);
-        input.unbindGamepad(0, input.GAMEPAD.BUTTONS.UP);
-        input.unbindGamepad(0, input.GAMEPAD.BUTTONS.DOWN);
-        input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_1);
+        //unbindKeys();
+        unbindGamepads();
     }
 
     // メニュー項目を作成するためのヘルパーメソッド
