@@ -38,6 +38,16 @@ const DataManifest = [
         name: "funwari-round_brown",
         type: "binary",
         src: "./data/fnt/funwariround-brown.fnt"
+    },
+    {
+        name: "funwari-round_white",
+        type: "image",
+        src: "./data/fnt/funwariround-white.png"
+    },
+    {
+        name: "funwari-round_white",
+        type: "binary",
+        src: "./data/fnt/funwariround-white.fnt"
     }
 ];
 
