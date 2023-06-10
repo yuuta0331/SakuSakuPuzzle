@@ -1,4 +1,4 @@
-import { game, input, Stage, ColorLayer, BitmapText, Sprite, loader } from "melonjs";
+import { game, input, Stage, ColorLayer, BitmapText, Sprite, loader, state } from "melonjs";
 
 export default class TitleScreen extends Stage {
     // メニュー項目
@@ -14,8 +14,8 @@ export default class TitleScreen extends Stage {
     maxInputMargin = 15;
 
     // Font for menu items
-    font = "funwari-round";
-    highlightedFont = "funwari-round_highlighted";
+    highlightedFont = "funwari-round";
+    font = "funwari-round_white";
 
     onResetEvent() {
 
@@ -45,7 +45,7 @@ export default class TitleScreen extends Stage {
         const margin_y = 70;
 
         // メニュー項目の文字列
-        const menuTexts = ["GameMain", "Help", "Ranking", "End"];
+        const menuTexts = ["ぷれい", "へるぷ", "らんきんぐ", "しゅうりょう"];
 
         // メニュー項目の作成
         this.menuItems = menuTexts.map((text, index) =>
@@ -113,7 +113,7 @@ export default class TitleScreen extends Stage {
         //selectedItem.isKinematic = true; // スケーリングが即時に適用されるようにする
 
         // 選択したメニュー項目のフォントをハイライトに変更
-        //this.menuItems[index].font = this.highlightedFont;
+        this.menuItems[index].font = this.highlightedFont;
 
         selectedItem.scale(1.0)
         selectedItem.alpha = 1.0;
@@ -145,7 +145,24 @@ export default class TitleScreen extends Stage {
             //エンターキーまたはゲームパッドのAボタンが押されたとき
             if (input.isKeyPressed("enter")) {
                 console.log("Enter");
-                // TODO: ここに、メニュー項目が選択されたときの動作を書く
+                switch (this.selectedMenuItemIndex) {
+                    case 0:
+                        //game.changeScene(state.PLAY);
+                        state.change(state.PLAY);
+                        break;
+                    case 1:
+                        //game.changeScene(HelpScene);
+                        state.change(state.HELP);
+                        break;
+                    case 2:
+                        //game.changeScene(RankingScene);
+                        state.change(state.RANKING);
+                        break;
+                    case 3:
+                        //game.changeScene(EndScene);
+                        break;
+                }
+                this.inputMargin = 0;
             };
         }
     }
