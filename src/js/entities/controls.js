@@ -39,6 +39,30 @@ class Button extends GUI_Object {
     }
 };
 
+class BButton extends GUI_Object {
+    constructor(x, y) {
+        super(x, y, {
+            image: g_game.texture,
+            region : "shadedDark36.png"
+        });
+        this.setOpacity(0.25);
+        this.anchorPoint.set(0, 0);
+    }
+
+    onClick(event) {
+        this.setOpacity(0.5);
+        input.triggerKeyEvent(input.KEY.B, true); // Change this to the key you want
+        return false;
+    }
+
+    onRelease(event) {
+        this.setOpacity(0.25);
+        input.triggerKeyEvent(input.KEY.B, false); // Change this to the key you want
+        return false;
+    }
+};
+
+
 
 /**
  * a virtual joypad
@@ -255,6 +279,13 @@ class VirtualJoypad extends Container {
             game.viewport.height - 150
         );
 
+        this.bButton = new BButton(
+            game.viewport.width - 300,
+            game.viewport.height - 150
+        );
+        this.addChild(this.bButton);
+        
+
         this.addChild(this.joypad);
         this.addChild(this.button);
 
@@ -267,7 +298,13 @@ class VirtualJoypad extends Container {
                     width - 150,
                     height - 150,
                     self.button.pos.z
-                )
+                );
+
+                self.bButton.pos.set(
+                    width - 300,
+                    height - 150,
+                    self.bButton.pos.z
+                );
             }
         );
     }
