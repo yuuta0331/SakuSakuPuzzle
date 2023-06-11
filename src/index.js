@@ -26,18 +26,25 @@ import VirtualJoypad from './js/entities/controls.js';
 
 import DataManifest from 'manifest.js';
 import { bindKeys, unbindKeys } from "./js/util/constants";
+// TODO オリジナルのロード画面を作成する
+//import CustomLoadingScreen from './js/stage/custom_loading_screen.js';
 
 
 device.onReady(() => {
 
+    // state.set(me.state.LOADING, new game.MyLoadingScreen());
+
+    // state.change(me.state.LOADING);
+
+
     // initialize the display canvas once the device/browser is ready
     if (!video.init(1920, 1080,
         {
-            parent: "screen", scale: "auto",
+            parent: "screen", scale: "device.devicePixelRatio",
             renderer: video.AUTO,
             scaleMethod: 'fit',
             doubleBuffering: true,
-            autoScale: false,
+            autoScale: true,
             antiAlias: true
         })) {
         alert("Your browser does not support HTML5 canvas.");
