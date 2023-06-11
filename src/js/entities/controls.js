@@ -114,6 +114,8 @@ class Joypad extends GUI_Object {
 
     // update the cursors value and trigger key event
     checkDirection(x, y) {
+
+        // LEFT
         if (x - this.pos.x < this.width / 2) {
             if (this.cursors.left === false) {
                 input.triggerKeyEvent(input.KEY.LEFT, true);
@@ -126,6 +128,8 @@ class Joypad extends GUI_Object {
                 this.cursors.right = false;
             }
         }
+
+        // RIGHT
         if (x - this.pos.x > this.width / 2) {
             if (this.cursors.right === false) {
                 input.triggerKeyEvent(input.KEY.RIGHT, true);
@@ -136,6 +140,34 @@ class Joypad extends GUI_Object {
             if (this.cursors.left === true) {
                 input.triggerKeyEvent(input.KEY.LEFT, false);
                 this.cursors.left = false;
+            }
+        }
+
+        // UP
+        if (y - this.pos.y < this.height / 2) {
+            if (this.cursors.up === false) {
+                input.triggerKeyEvent(input.KEY.UP, true);
+                this.cursors.up = true;
+                this.joypad_offset.y = -((this.height / 2 - (y - this.pos.y)) % this.pad.height / 4);
+            }
+            // release the down key if it was pressed
+            if (this.cursors.down === true) {
+                input.triggerKeyEvent(input.KEY.DOWN, false);
+                this.cursors.down = false;
+            }
+        }
+
+        // DOWN
+        if (y - this.pos.y > this.height / 2) {
+            if (this.cursors.down === false) {
+                input.triggerKeyEvent(input.KEY.DOWN, true);
+                this.cursors.down = true;
+                this.joypad_offset.y = +(((y - this.pos.y) - this.height / 2) % this.pad.height / 4);
+            }
+            // release the up key if it was pressed
+            if (this.cursors.up === true) {
+                input.triggerKeyEvent(input.KEY.UP, false);
+                this.cursors.up = false;
             }
         }
     }
@@ -163,6 +195,15 @@ class Joypad extends GUI_Object {
         if (this.cursors.right === true) {
             input.triggerKeyEvent(input.KEY.RIGHT, false);
             this.cursors.right = false;
+        }
+
+        if (this.cursors.up === true) {
+            input.triggerKeyEvent(input.KEY.UP, false);
+            this.cursors.up = false;
+        }
+        if (this.cursors.down === true) {
+            input.triggerKeyEvent(input.KEY.DOWN, false);
+            this.cursors.down = false;
         }
         this.joypad_offset.set(0, 0);
         return false;
