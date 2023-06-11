@@ -1,6 +1,8 @@
 import { Stage, audio, game, ColorLayer, ImageLayer, BitmapText, Sprite, loader, Rect, Renderable, plugins, device } from 'melonjs';
 import Cursor from '../entities/cursor.js';
 import VirtualJoypad from '../entities/controls.js';
+import Block from '../renderables/block.js';
+import BlockGrid from '../renderables/block_grid.js';
 
 class MyRectangle extends Renderable {
     constructor(x, y, width, height, color) {
@@ -15,12 +17,28 @@ class MyRectangle extends Renderable {
     }
 }
 
+class TransparentBlock extends Block {
+    draw(renderer) {
+        renderer.globalAlpha = 0.5;
+        super.draw(renderer);
+        renderer.globalAlpha = 1.0;
+    }
+}
+
+class BlockPiece extends Block {
+    constructor(x, y, width, height, color, shape, split) {
+        super(x, y, width / split, height / split, color, shape);
+    }
+}
+
+
+
 class PlayScreen extends Stage {
     /**
      *  action to perform on state change
      */
 
-    
+
 
     onResetEvent() {
 
@@ -72,6 +90,21 @@ class PlayScreen extends Stage {
 
         audio.stopTrack();
         audio.playTrack("gamemain");
+
+        // ブロックを生成
+        // let blockGrid = new BlockGrid(0, 0, 50, 16, 16);
+        // blockGrid.generateBlocks(4, ["red", "blue", "green", "yellow"], ["square", "triangle"]);
+        // game.world.addChild(blockGrid);
+
+
+        // お手本となるブロックを描画
+        let sampleGrid = new BlockGrid(500, 800, 90, 4, 4);
+        sampleGrid.generateBlocks(4, ["red", "blue", "green", "yellow"], ["square", "triangle"]);
+        game.world.addChild(sampleGrid);
+
+        let centerGrid = new BlockGrid(game.viewport.width / 2 - 400, game.viewport.height / 2 - 400, 90, 4, 4);
+        centerGrid.generateBlocks(4, ["red", "blue", "green", "yellow"], ["square", "triangle"], TransparentBlock);
+        game.world.addChild(centerGrid);
 
         // display if debugPanel is enabled or on mobile
         // モバイルデバイスでのみ疑似コントローラーを表示
