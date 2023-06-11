@@ -65,8 +65,9 @@ export default class TitleScreen extends Stage {
         // ゲームパッドのボタンをキーボードのキーにマッピング
         bindGamepads();
 
-        input.bindPointer(input.pointer.LEFT, input.KEY.ENTER);
+        //input.bindPointer(input.pointer.LEFT, input.KEY.ENTER);
 
+        audio.stopTrack();
         audio.playTrack("title");
     }
 
@@ -127,21 +128,21 @@ export default class TitleScreen extends Stage {
         } else {
             if (input.isKeyPressed("up")) {
                 
-                audio.playTrack("cursor_move");
+                audio.play("cursor_move");
                 this.selectMenuItem((this.selectedMenuItemIndex - 1 + this.menuItems.length) % this.menuItems.length);
                 this.inputMargin = 0;
             };
 
             if (input.isKeyPressed("down")) {
                 
-                audio.playTrack("cursor_move");
+                audio.play("cursor_move");
                 this.selectMenuItem((this.selectedMenuItemIndex + 1) % this.menuItems.length);
                 this.inputMargin = 0;
             };
 
             //エンターキーまたはゲームパッドのAボタンが押されたとき
             if (input.isKeyPressed("enter")) {
-                audio.playTrack("enter");
+                audio.play("enter");
                 switch (this.selectedMenuItemIndex) {
                     case 0:
                         //game.changeScene(state.PLAY);

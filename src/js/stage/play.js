@@ -66,6 +66,7 @@ class PlayScreen extends Stage {
         this.cursor = new Cursor(game.viewport.width / 2, game.viewport.height / 2);
         game.world.addChild(this.cursor);
 
+        audio.stopTrack();
         audio.playTrack("gamemain");
     }
 
