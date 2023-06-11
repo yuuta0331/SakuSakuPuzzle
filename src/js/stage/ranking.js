@@ -1,4 +1,4 @@
-import { game, input, Stage, ColorLayer, BitmapText, Sprite, loader, state } from "melonjs";
+import { game, audio, input, Stage, ColorLayer, BitmapText, Sprite, loader, state } from "melonjs";
 
 class RankingScreen extends Stage {
     /**
@@ -24,14 +24,20 @@ class RankingScreen extends Stage {
         // ゲームパッドのボタンをキーボードのキーにマッピング
         input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.FACE_1 }, input.KEY.ENTER);
         input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.FACE_2 }, input.KEY.BACKSPACE);
+
+        audio.stopTrack();
+        audio.playTrack("result");
     }
 
     onDestroyEvent() {
+
+        audio.stopTrack();
+
         // キーボードとゲームパッドのイベントの解除
-        input.unbindKey(input.KEY.ENTER);
-        input.unbindKey(input.KEY.BACKSPACE);
-        input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_1);
-        input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_2);
+            input.unbindKey(input.KEY.ENTER);
+            input.unbindKey(input.KEY.BACKSPACE);
+            input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_1);
+            input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_2);
     }
 
     update(dt) {

@@ -37,7 +37,8 @@ export default class TitleScreen extends Stage {
         }));
 
         // 以前のメニュー項目の削除
-        this.menuItems.forEach(item => game.world.removeChild(item));
+        // TODO 既に削除されている場合は実行しないようにする必要がある
+        //this.menuItems.forEach(item => game.world.removeChild(item));
 
         // 文字列の最小Y座標
         const base_y = 480;

@@ -1,4 +1,4 @@
-import { game, input, Stage, ColorLayer, BitmapText, Sprite, loader, state } from "melonjs";
+import { game, audio, input, Stage, ColorLayer, BitmapText, Sprite, loader, state } from "melonjs";
 
 export default class HelpScreen extends Stage {
     /**
@@ -38,9 +38,15 @@ export default class HelpScreen extends Stage {
         input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.RIGHT }, input.KEY.RIGHT);
         input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.FACE_1 }, input.KEY.ENTER);
         input.bindGamepad(0, { type: "buttons", code: input.GAMEPAD.BUTTONS.FACE_2 }, input.KEY.BACKSPACE);
+
+        audio.stopTrack();
+        audio.playTrack("title");
     }
 
     onDestroyEvent() {
+
+        audio.stopTrack();
+
         // キーボードとゲームパッドのイベントの解除
         input.unbindKey(input.KEY.LEFT);
         input.unbindKey(input.KEY.RIGHT);
