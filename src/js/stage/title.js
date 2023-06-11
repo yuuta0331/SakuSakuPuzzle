@@ -1,4 +1,4 @@
-import { game, input, Stage, ColorLayer, BitmapText, Sprite, loader, state } from "melonjs";
+import { game, audio, input, Stage, ColorLayer, BitmapText, Sprite, loader, state } from "melonjs";
 import { bindKeys, unbindKeys, bindGamepads, unbindGamepads } from "../util/constants";
 
 export default class TitleScreen extends Stage {
@@ -64,12 +64,17 @@ export default class TitleScreen extends Stage {
 
         // ゲームパッドのボタンをキーボードのキーにマッピング
         bindGamepads();
+
+        input.bindPointer(input.pointer.LEFT, input.KEY.ENTER);
+
+        audio.playTrack("title");
     }
 
     onDestroyEvent() {
         // キーボードとゲームパッドのイベントの解除
         //unbindKeys();
         unbindGamepads();
+        audio.stopTrack();
     }
 
     // メニュー項目を作成するためのヘルパーメソッド
@@ -121,20 +126,22 @@ export default class TitleScreen extends Stage {
             this.inputMargin++;
         } else {
             if (input.isKeyPressed("up")) {
-                console.log("Up");
+                
+                audio.playTrack("cursor_move");
                 this.selectMenuItem((this.selectedMenuItemIndex - 1 + this.menuItems.length) % this.menuItems.length);
                 this.inputMargin = 0;
             };
 
             if (input.isKeyPressed("down")) {
-                console.log("Down");
+                
+                audio.playTrack("cursor_move");
                 this.selectMenuItem((this.selectedMenuItemIndex + 1) % this.menuItems.length);
                 this.inputMargin = 0;
             };
 
             //エンターキーまたはゲームパッドのAボタンが押されたとき
             if (input.isKeyPressed("enter")) {
-                console.log("Enter");
+                audio.playTrack("enter");
                 switch (this.selectedMenuItemIndex) {
                     case 0:
                         //game.changeScene(state.PLAY);

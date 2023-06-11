@@ -2,6 +2,16 @@
 // note : this is note a webpack manifest
 const DataManifest = [
 
+    /* BGM */
+    { name: "title",  type: "audio", src: "./data/bgm/" },
+    { name: "gamemain",  type: "audio", src: "./data/bgm/" },
+    { name: "result",  type: "audio", src: "./data/bgm/" },
+    { name: "end",  type: "audio", src: "./data/bgm/" },
+
+    /* SE */
+    { name: "cursor_move",  type: "audio", src: "./data/sfx/" },
+    { name: "enter",  type: "audio", src: "./data/sfx/" },
+
     /* Bitmap Text */
     {
         name: "PressStart2P",

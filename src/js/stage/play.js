@@ -1,6 +1,5 @@
-import { Stage, game, ColorLayer, ImageLayer, BitmapText, Sprite, loader, Rect, Renderable, plugins, device } from 'melonjs';
+import { Stage, audio, game, ColorLayer, ImageLayer, BitmapText, Sprite, loader, Rect, Renderable, plugins, device } from 'melonjs';
 import Cursor from '../entities/cursor.js';
-import VirtualJoypad from '../entities/controls.js';
 
 class MyRectangle extends Renderable {
     constructor(x, y, width, height, color) {
@@ -20,6 +19,7 @@ class PlayScreen extends Stage {
      *  action to perform on state change
      */
     onResetEvent() {
+
         // add a gray background to the default Stage
         game.world.addChild(new ColorLayer("background", "#202020"));
 
@@ -66,18 +66,13 @@ class PlayScreen extends Stage {
         this.cursor = new Cursor(game.viewport.width / 2, game.viewport.height / 2);
         game.world.addChild(this.cursor);
 
-                // display if debugPanel is enabled or on mobile
-                if ((plugins.debugPanel && plugins.debugPanel.panel.visible) || device.touch) {
-                    if (typeof this.virtualJoypad === "undefined") {
-                        this.virtualJoypad = new VirtualJoypad();
-                    }
-                    game.world.addChild(this.virtualJoypad);
-                }
+        audio.playTrack("gamemain");
     }
 
     onDestroyEvent() {
         game.world.removeChild(this.cursor);
         this.cursor = null;
+        audio.stopTrack();
     }
 
     // update(dt) {
