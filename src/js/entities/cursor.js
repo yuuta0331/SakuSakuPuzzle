@@ -25,19 +25,19 @@ export default class Cursor extends Sprite {
 
     pointerMove(event) {
         //if (this.released === false) {
-            var x = event.gameScreenX + (event.width / 2);
-            var y = event.gameScreenY + (event.height / 2);
-            console.log('pointerMove:', x, y); // マウスポインタの位置をログ出力
-            // pointerMove is a global on the viewport, so check for coordinates
-            if (this.getBounds().contains(x, y)) {
-                // if any direction is active, update it if necessary
-                if (this.cursors.left === true || this.cursors.right === true) {
-                    this.checkDirection.call(this, x, y);
-                }
-            } else {
-                // release keys/joypad if necessary
-                this.onRelease.call(this, event);
+        var x = event.gameScreenX + (event.width / 2);
+        var y = event.gameScreenY + (event.height / 2);
+        console.log('pointerMove:', x, y); // マウスポインタの位置をログ出力
+        // pointerMove is a global on the viewport, so check for coordinates
+        if (this.getBounds().contains(x, y)) {
+            // if any direction is active, update it if necessary
+            if (this.cursors.left === true || this.cursors.right === true) {
+                this.checkDirection.call(this, x, y);
             }
+        } else {
+            // release keys/joypad if necessary
+            this.onRelease.call(this, event);
+        }
         //}
     }
 
@@ -54,49 +54,54 @@ export default class Cursor extends Sprite {
     }
 
     handleInput() {
-        
+
         let moved = false;
 
         // マウスポインタの位置にカーソルを移動する
         if (input.pointer.hover) {
             const pointerPos = game.input.pointer.pos;
             console.log('Mouse input:', pointerPos); // マウスポインタの位置をログ出力
-            this.pos.x = pointerPos.x;
-            this.pos.y = pointerPos.y;
-            moved = true;
+
+            const newX = Math.min(Math.max(pointerPos.x, 0), game.viewport.width - this.width);
+            const newY = Math.min(Math.max(pointerPos.y, 0), game.viewport.height - this.height);
+
+            if (newX !== this.pos.x || newY !== this.pos.y) {
+                this.pos.x = newX;
+                this.pos.y = newY;
+                moved = true;
+            }
         }
-
-        // ゲームパッドのスティック入力によりカーソルを移動する
-        // const left = input.keyStatus('left');
-        // const right = input.keyStatus.right;
-        // const up = input.keyStatus.up;
-        // const down = input.keyStatus.down;
-
-        // if (left || right || up || down) {
-        //     console.log('Gamepad input:', left, right, up, down); // ゲームパッドの入力をログ出力
-        //     const dx = (right ? this.speed : 0) - (left ? this.speed : 0);
-        //     const dy = (down ? this.speed : 0) - (up ? this.speed : 0);
-        //     this.pos.x += dx;
-        //     this.pos.y += dy;
-        //     moved = true;
-        // }
 
         // ゲームパッドのスティック入力によりカーソルを移動する
         if (input.isKeyPressed('left')) {
-            this.pos.x -= this.speed;
-            moved = true;
+            const newX = this.pos.x - this.speed;
+            if (newX >= 0) {
+                this.pos.x = newX;
+                moved = true;
+            }
         }
         if (input.isKeyPressed('right')) {
-            this.pos.x += this.speed;
-            moved = true;
+            const newX = this.pos.x + this.speed;
+            // if (newX <= game.viewport.width - this.width) {
+            if (newX <= game.viewport.width) {
+                this.pos.x = newX;
+                moved = true;
+            }
         }
         if (input.isKeyPressed('up')) {
-            this.pos.y -= this.speed;
-            moved = true;
+            const newY = this.pos.y - this.speed;
+            if (newY >= 0) {
+                this.pos.y = newY;
+                moved = true;
+            }
         }
         if (input.isKeyPressed('down')) {
-            this.pos.y += this.speed;
-            moved = true;
+            const newY = this.pos.y + this.speed;
+            // if (newY <= game.viewport.height - this.height) {
+            if (newY <= game.viewport.height) {
+                this.pos.y = newY;
+                moved = true;
+            }
         }
 
         return moved;
