@@ -7,10 +7,14 @@ import {
     utils,
     plugin,
     pool,
-    TextureAtlas
+    TextureAtlas,
+    plugins,
+    game
 } from 'melonjs';
 
 import 'index.css';
+
+import g_game from './game.js';
 
 import TitleScreen from 'js/stage/title.js';
 import PlayScreen from 'js/stage/play.js';
@@ -18,10 +22,10 @@ import HelpScreen from './js/stage/help';
 import RankingScreen from './js/stage/ranking';
 import PlayerEntity from 'js/renderables/player.js';
 
+import VirtualJoypad from './js/entities/controls.js';
+
 import DataManifest from 'manifest.js';
 import { bindKeys, unbindKeys } from "./js/util/constants";
-
-import g_game from './game.js';
 
 
 device.onReady(() => {
@@ -54,6 +58,8 @@ device.onReady(() => {
     // allow cross-origin for image/texture loading
     loader.crossOrigin = "anonymous";
 
+    let virtualJoypad; // Define virtualJoypad outside the callback 
+
     // set and load all resources.
     loader.preload(DataManifest, function () {
 
@@ -77,7 +83,15 @@ device.onReady(() => {
         pool.register("mainPlayer", PlayerEntity);
 
         // Start the game.
-        //state.change(state.MENU);
-        state.change(state.PLAY);
+        state.change(state.MENU);
+        //state.change(state.PLAY);
+
+        // display if debugPanel is enabled or on mobile
+        if ((plugins.debugPanel && plugins.debugPanel.panel.visible) || device.touch) {
+            if (typeof virtualJoypad === "undefined") {
+                virtualJoypad = new VirtualJoypad();
+            }
+            game.world.addChild(virtualJoypad);
+        }
     });
 });
