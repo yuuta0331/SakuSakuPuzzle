@@ -1,5 +1,6 @@
 import { Stage, audio, game, ColorLayer, ImageLayer, BitmapText, Sprite, loader, Rect, Renderable, plugins, device } from 'melonjs';
 import Cursor from '../entities/cursor.js';
+import VirtualJoypad from '../entities/controls.js';
 
 class MyRectangle extends Renderable {
     constructor(x, y, width, height, color) {
@@ -18,6 +19,9 @@ class PlayScreen extends Stage {
     /**
      *  action to perform on state change
      */
+
+    
+
     onResetEvent() {
 
         // add a gray background to the default Stage
@@ -68,6 +72,16 @@ class PlayScreen extends Stage {
 
         audio.stopTrack();
         audio.playTrack("gamemain");
+
+        // display if debugPanel is enabled or on mobile
+        // モバイルデバイスでのみ疑似コントローラーを表示
+        // ※一部タブレットでは表示されない。
+        if (device.isMobile) {
+            if (typeof this.virtualJoypad === "undefined") {
+                this.virtualJoypad = new VirtualJoypad();
+            }
+            game.world.addChild(this.virtualJoypad);
+        }
     }
 
     onDestroyEvent() {
