@@ -78,7 +78,7 @@ class PlayScreen extends Stage {
 
         // add a font text display object
         game.world.addChild(new BitmapText(game.viewport.width / 2, game.viewport.height / 2, {
-            font: "funwari-round",
+            font: "funwari-round_white",
             size: 2.0,
             textBaseline: "middle",
             textAlign: "center",

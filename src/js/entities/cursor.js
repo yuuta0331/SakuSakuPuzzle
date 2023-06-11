@@ -1,4 +1,4 @@
-import { game, input, Renderable, loader, Sprite } from "melonjs";
+import { game, event, input, Renderable, loader, Sprite } from "melonjs";
 import { bindKeys, unbindKeys, bindGamepads, unbindGamepads } from "../util/constants";
 
 export default class Cursor extends Sprite {
@@ -15,7 +15,16 @@ export default class Cursor extends Sprite {
 
         // register on the pointermove event
         // マウス・タッチ入力を有効にする
-        input.registerPointerEvent('pointermove', this, this.pointerMove.bind(this));
+        // これでも大丈夫だが、メソッドを呼び出すたびにイベントが登録されてしまうので、
+        //input.registerPointerEvent('pointermove', game.viewport, this.pointerMove.bind(this));
+
+
+        const self = this; // ここでthis（Cursorインスタンス）をselfに保存します
+        input.registerPointerEvent('pointermove', game.viewport, function(event) {
+            self.pointerMove(event); // selfを使用してpointerMoveを呼び出します
+        });
+        // TODO 負荷が高いので、マウスポインタの位置を取得する処理は、改善が必要
+
 
         // ゲームパッド入力を有効にする
         bindGamepads();
@@ -24,24 +33,32 @@ export default class Cursor extends Sprite {
     }
 
     pointerMove(event) {
-        //if (this.released === false) {
-        var x = event.gameScreenX + (event.width / 2);
-        var y = event.gameScreenY + (event.height / 2);
-        console.log('pointerMove:', x, y); // マウスポインタの位置をログ出力
-        // pointerMove is a global on the viewport, so check for coordinates
-        if (this.getBounds().contains(x, y)) {
-            // if any direction is active, update it if necessary
-            if (this.cursors.left === true || this.cursors.right === true) {
-                this.checkDirection.call(this, x, y);
-            }
-        } else {
-            // release keys/joypad if necessary
-            this.onRelease.call(this, event);
-        }
-        //}
+        // マウスポインタの位置を取得
+        var x = event.gameScreenX;
+        var y = event.gameScreenY;
+        //console.log('pointerMove:', x, y); // マウスポインタの位置をログ出力
+    
+        // カーソルの位置をマウスポインタの位置に設定
+        this.pos.x = x;
+        this.pos.y = y;
+
+        // 描画を強制的に更新する
+        game.repaint();
     }
 
+
     update(dt) {
+        // input.registerPointerEvent('pointermove', game.viewport, (event) => {
+        //             // マウスポインタの位置を取得
+        // var x = event.gameScreenX;
+        // var y = event.gameScreenY;
+        // console.log('pointerMove:', x, y); // マウスポインタの位置をログ出力
+
+        // // カーソルの位置をマウスポインタの位置に設定
+        // this.pos.x = x;
+        // this.pos.y = y;
+        // });
+
         const moving = this.handleInput();
 
         // 位置が変更された場合のみ、再描画を行う
@@ -58,19 +75,33 @@ export default class Cursor extends Sprite {
         let moved = false;
 
         // マウスポインタの位置にカーソルを移動する
-        if (input.pointer.hover) {
-            const pointerPos = game.input.pointer.pos;
-            console.log('Mouse input:', pointerPos); // マウスポインタの位置をログ出力
+        // マウスポインタの位置を取得
+        // var x = input.pointer.pos.x;
+        // var y = input.pointer.pos.y;
+        // console.log('update:', x, y); // マウスポインタの位置をログ出力
 
-            const newX = Math.min(Math.max(pointerPos.x, 0), game.viewport.width - this.width);
-            const newY = Math.min(Math.max(pointerPos.y, 0), game.viewport.height - this.height);
+        // // カーソルの位置がマウスポインタの位置と異なる場合のみ更新
+        // if (this.pos.x !== x || this.pos.y !== y) {
+        //     // カーソルの位置をマウスポインタの位置に設定
+        //     this.pos.set(x, y);
 
-            if (newX !== this.pos.x || newY !== this.pos.y) {
-                this.pos.x = newX;
-                this.pos.y = newY;
-                moved = true;
-            }
-        }
+        //     // 再描画を行います
+        //     return true;
+        // }
+
+        // if (input.pointer.hover) {
+        //     const pointerPos = game.input.pointer.pos;
+        //     console.log('Mouse input:', pointerPos); // マウスポインタの位置をログ出力
+
+        //     const newX = Math.min(Math.max(pointerPos.x, 0), game.viewport.width - this.width);
+        //     const newY = Math.min(Math.max(pointerPos.y, 0), game.viewport.height - this.height);
+
+        //     if (newX !== this.pos.x || newY !== this.pos.y) {
+        //         this.pos.x = newX;
+        //         this.pos.y = newY;
+        //         moved = true;
+        //     }
+        // }
 
         // ゲームパッドのスティック入力によりカーソルを移動する
         if (input.isKeyPressed('left')) {
