@@ -11,7 +11,7 @@ export default class Cursor extends Sprite {
         super(x, y, settings);
 
         // カーソルの移動速度
-        this.speed = 3;
+        this.speed = 12;
 
         // ゲームパッド入力を有効にする
         bindGamepads();
@@ -36,13 +36,13 @@ export default class Cursor extends Sprite {
         let moved = false;
 
         // マウスポインタの位置にカーソルを移動する
-        // if (input.pointer.hover) {
-        //     const pointerPos = game.input.pointer.pos;
-        //     console.log('Mouse input:', pointerPos); // マウスポインタの位置をログ出力
-        //     this.pos.x = pointerPos.x;
-        //     this.pos.y = pointerPos.y;
-        //     moved = true;
-        // }
+        if (input.pointer.hover) {
+            const pointerPos = game.input.pointer.pos;
+            console.log('Mouse input:', pointerPos); // マウスポインタの位置をログ出力
+            this.pos.x = pointerPos.x;
+            this.pos.y = pointerPos.y;
+            moved = true;
+        }
 
         // ゲームパッドのスティック入力によりカーソルを移動する
         // const left = input.keyStatus('left');
