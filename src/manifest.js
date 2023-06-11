@@ -63,7 +63,11 @@ const DataManifest = [
         name: "funwari-round_white",
         type: "binary",
         src: "./data/fnt/funwariround-white.fnt"
-    }
+    },
+
+        // texturePacker
+        { name: "texture",         type: "json",   src: "./data/img/texture.json" },
+        { name: "texture",         type: "image",  src: "./data/img/texture.png" }
 ];
 
 export default DataManifest;

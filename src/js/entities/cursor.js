@@ -13,10 +13,32 @@ export default class Cursor extends Sprite {
         // カーソルの移動速度
         this.speed = 12;
 
+        // register on the pointermove event
+        // マウス・タッチ入力を有効にする
+        input.registerPointerEvent('pointermove', this, this.pointerMove.bind(this));
+
         // ゲームパッド入力を有効にする
         bindGamepads();
 
         bindKeys();
+    }
+
+    pointerMove(event) {
+        //if (this.released === false) {
+            var x = event.gameScreenX + (event.width / 2);
+            var y = event.gameScreenY + (event.height / 2);
+            console.log('pointerMove:', x, y); // マウスポインタの位置をログ出力
+            // pointerMove is a global on the viewport, so check for coordinates
+            if (this.getBounds().contains(x, y)) {
+                // if any direction is active, update it if necessary
+                if (this.cursors.left === true || this.cursors.right === true) {
+                    this.checkDirection.call(this, x, y);
+                }
+            } else {
+                // release keys/joypad if necessary
+                this.onRelease.call(this, event);
+            }
+        //}
     }
 
     update(dt) {
@@ -81,6 +103,10 @@ export default class Cursor extends Sprite {
     }
 
     onDestroyEvent() {
+
+        // release register event event
+        me.input.releasePointerEvent("pointermove", this);
+
         unbindKeys();
         unbindGamepads();
     }

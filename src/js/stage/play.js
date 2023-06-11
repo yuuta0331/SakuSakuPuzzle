@@ -1,5 +1,6 @@
-import { Stage, game, ColorLayer, ImageLayer, BitmapText, Sprite, loader, Rect, Renderable } from 'melonjs';
-import Cursor from '../entity/cursor.js';
+import { Stage, game, ColorLayer, ImageLayer, BitmapText, Sprite, loader, Rect, Renderable, plugins, device } from 'melonjs';
+import Cursor from '../entities/cursor.js';
+import VirtualJoypad from '../entities/controls.js';
 
 class MyRectangle extends Renderable {
     constructor(x, y, width, height, color) {
@@ -64,6 +65,14 @@ class PlayScreen extends Stage {
 
         this.cursor = new Cursor(game.viewport.width / 2, game.viewport.height / 2);
         game.world.addChild(this.cursor);
+
+                // display if debugPanel is enabled or on mobile
+                if ((plugins.debugPanel && plugins.debugPanel.panel.visible) || device.touch) {
+                    if (typeof this.virtualJoypad === "undefined") {
+                        this.virtualJoypad = new VirtualJoypad();
+                    }
+                    game.world.addChild(this.virtualJoypad);
+                }
     }
 
     onDestroyEvent() {

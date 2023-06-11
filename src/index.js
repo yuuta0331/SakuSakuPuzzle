@@ -6,7 +6,8 @@ import {
     video,
     utils,
     plugin,
-    pool
+    pool,
+    TextureAtlas
 } from 'melonjs';
 
 import 'index.css';
@@ -19,6 +20,8 @@ import PlayerEntity from 'js/renderables/player.js';
 
 import DataManifest from 'manifest.js';
 import { bindKeys, unbindKeys } from "./js/util/constants";
+
+import g_game from './game.js';
 
 
 device.onReady(() => {
@@ -54,6 +57,10 @@ device.onReady(() => {
     // set and load all resources.
     loader.preload(DataManifest, function () {
 
+        g_game.texture = new TextureAtlas(
+            loader.getJSON("texture"),
+            loader.getImage("texture")
+        );
 
         // set the fade transition effect
         state.transition("fade", "#000000", 500);
@@ -70,7 +77,7 @@ device.onReady(() => {
         pool.register("mainPlayer", PlayerEntity);
 
         // Start the game.
-        state.change(state.MENU);
-        //state.change(state.PLAY);
+        //state.change(state.MENU);
+        state.change(state.PLAY);
     });
 });
