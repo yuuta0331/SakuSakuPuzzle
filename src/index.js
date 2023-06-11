@@ -87,7 +87,9 @@ device.onReady(() => {
         //state.change(state.PLAY);
 
         // display if debugPanel is enabled or on mobile
-        if ((plugins.debugPanel && plugins.debugPanel.panel.visible) || device.touch) {
+        // モバイルデバイスでのみ疑似コントローラーを表示
+        // ※一部タブレットでは表示されない。
+        if (device.isMobile) {
             if (typeof virtualJoypad === "undefined") {
                 virtualJoypad = new VirtualJoypad();
             }
