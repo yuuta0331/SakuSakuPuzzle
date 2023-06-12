@@ -79,16 +79,16 @@ export default class HelpScreen extends Stage {
                     console.log("Enter");
                     switch (this.selectedMenuItemIndex) {
                         case 0:
-                            //game.changeScene(state.PLAY);
-                            //state.change(state.PLAY);
+                            game.changeScene(state.PLAY);
+                            state.change(state.PLAY);
                             break;
                         case 1:
-                            //game.changeScene(HelpScene);
-                            //state.change(state.HELP);
+                            game.changeScene(HelpScene);
+                            state.change(state.SETTINGS);
                             break;
                         case 2:
-                            //game.changeScene(RankingScene);
-                            //state.change(state.RANKING);
+                            game.changeScene(RankingScene);
+                            state.change(state.USER);
                             break;
                         case 3:
                             //game.changeScene(EndScene);

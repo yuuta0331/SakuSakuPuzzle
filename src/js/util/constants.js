@@ -129,6 +129,10 @@ export function bindKeys() {
 	input.bindKey(input.KEY.ENTER, "enter");
 	input.bindKey(input.KEY.ESC, "exit", true);
 	input.bindKey(input.KEY.F, "fullscreen", true);
+
+	// マウスの左クリックをスペースキーを押した時と同様に
+	input.bindPointer(0, 32);
+	//input.bindPointer(2, input.KEY.BACKSPACE);
 }
 
 export function unbindKeys() {

@@ -1,5 +1,7 @@
 import { game, audio, input, Stage, ColorLayer, BitmapText, Sprite, loader, state } from "melonjs";
 import { bindKeys, unbindKeys, bindGamepads, unbindGamepads } from "../util/constants";
+import UIContainer from "../entities/HUD";
+import g_game from "../../game";
 
 export default class TitleScreen extends Stage {
     // メニュー項目
@@ -70,6 +72,15 @@ export default class TitleScreen extends Stage {
 
         audio.stopTrack();
         audio.playTrack("title");
+
+        // reset the score
+        g_game.data.score = 0;
+
+        // add our HUD to the game world
+        if (typeof this.HUD === "undefined") {
+            this.HUD = new UIContainer();
+        }
+        game.world.addChild(this.HUD);
     }
 
     onDestroyEvent() {
@@ -151,11 +162,11 @@ export default class TitleScreen extends Stage {
                         break;
                     case 1:
                         //game.changeScene(HelpScene);
-                        state.change(state.HELP);
+                        state.change(state.SETTINGS);
                         break;
                     case 2:
                         //game.changeScene(RankingScene);
-                        state.change(state.RANKING);
+                        state.change(state.USER);
                         break;
                     case 3:
                         //game.changeScene(EndScene);

@@ -85,9 +85,6 @@ class PlayScreen extends Stage {
             text: "Hello World !"
         }));
 
-        this.cursor = new Cursor(game.viewport.width / 2, game.viewport.height / 2);
-        game.world.addChild(this.cursor);
-
         audio.stopTrack();
         audio.playTrack("gamemain");
 
@@ -102,9 +99,13 @@ class PlayScreen extends Stage {
         sampleGrid.generateBlocks(4, ["red", "blue", "green", "yellow"], ["square", "triangle"]);
         game.world.addChild(sampleGrid);
 
-        let centerGrid = new BlockGrid(game.viewport.width / 2 - 400, game.viewport.height / 2 - 400, 90, 4, 4);
+        let centerGrid = new BlockGrid(game.viewport.width / 2　, game.viewport.height / 2 , 90, 4, 4);
         centerGrid.generateBlocks(4, ["red", "blue", "green", "yellow"], ["square", "triangle"], TransparentBlock);
         game.world.addChild(centerGrid);
+
+        // カーソルを描画
+        this.cursor = new Cursor(game.viewport.width / 2, game.viewport.height / 2);
+        game.world.addChild(this.cursor);
 
         // display if debugPanel is enabled or on mobile
         // モバイルデバイスでのみ疑似コントローラーを表示

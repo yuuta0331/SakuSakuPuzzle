@@ -9,7 +9,8 @@ import {
     pool,
     TextureAtlas,
     plugins,
-    game
+    game, input
+    ,event
 } from 'melonjs';
 
 import 'index.css';
@@ -23,7 +24,7 @@ import RankingScreen from './js/stage/ranking';
 import PlayerEntity from 'js/renderables/player.js';
 
 import VirtualJoypad from './js/entities/controls.js';
-
+import UIContainer from './js/entities/HUD.js';
 import DataManifest from 'manifest.js';
 import { bindKeys, unbindKeys } from "./js/util/constants";
 // TODO オリジナルのロード画面を作成する
@@ -36,7 +37,7 @@ device.onReady(() => {
 
     // state.change(me.state.LOADING);
 
-
+    // load everything & display a loading screen
     // initialize the display canvas once the device/browser is ready
     if (!video.init(1920, 1080,
         {
@@ -80,14 +81,37 @@ device.onReady(() => {
 
         // bind keys
         bindKeys();
-        // set the user defined game stages
+        // ユーザー定義ゲームステージを設定する
         state.set(state.MENU, new TitleScreen());
         state.set(state.PLAY, new PlayScreen());
-        state.set(state.HELP, new HelpScreen());
-        state.set(state.RANKING, new RankingScreen());
+        state.set(state.SETTINGS, new HelpScreen());
+        state.set(state.USER, new RankingScreen());
 
-        // add our player entity in the entity pool
+        // エンティティプールにプレイヤーエンティティを追加する
         pool.register("mainPlayer", PlayerEntity);
+
+
+        // キーボードショートカットを追加する
+         event.on( event.KEYDOWN, (action, keyCode /*, edge */) => {
+
+            // change global volume setting
+            if (keyCode ===  input.KEY.PLUS) {
+                // increase volume
+                 audio.setVolume( audio.getVolume()+0.1);
+            } else if (keyCode ===  input.KEY.MINUS) {
+                // decrease volume
+                 audio.setVolume( audio.getVolume()-0.1);
+            }
+
+            // toggle fullscreen on/off
+            if (keyCode ===  input.KEY.F) {
+                if (! device.isFullscreen()) {
+                     device.requestFullscreen();
+                } else {
+                     device.exitFullscreen();
+                }
+            }
+        });
 
         // Start the game.
         state.change(state.MENU);
