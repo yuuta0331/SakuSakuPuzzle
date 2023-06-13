@@ -95,13 +95,20 @@ class PlayScreen extends Stage {
 
 
         // お手本となるブロックを描画
-        let sampleGrid = new BlockGrid(500, 800, 90, 4, 4);
-        sampleGrid.generateBlocks(4, ["red", "blue", "green", "yellow"], ["square", "triangle"]);
-        game.world.addChild(sampleGrid);
+        this.sampleGrid = new BlockGrid(250, 300, 90, 2, 2);
+        let blocks = this.sampleGrid.generateBlocks(4, ["red", "blue", "green", "yellow"], ["square", "triangle"]);
+        if (blocks) {
+            game.world.addChild(this.sampleGrid);
 
-        let centerGrid = new BlockGrid(game.viewport.width / 2　, game.viewport.height / 2 , 90, 4, 4);
-        centerGrid.generateBlocks(4, ["red", "blue", "green", "yellow"], ["square", "triangle"], TransparentBlock);
-        game.world.addChild(centerGrid);
+            let centerGrid = new BlockGrid(game.viewport.width / 2 + 400, game.viewport.height / 2 - 100, 90, 4, 4);
+            centerGrid.addBlocks(blocks, 0.5, this.sampleGrid.x_position, this.sampleGrid.y_position);
+            game.world.addChild(centerGrid);
+        }
+
+        // プレイヤーのブロックを描画
+        let blockPeice = new BlockPiece(game.viewport.width / 2, game.viewport.height / 2, 90, 90, "red", "square", 4);
+        game.world.addChild(blockPeice);
+
 
         // カーソルを描画
         this.cursor = new Cursor(game.viewport.width / 2, game.viewport.height / 2);
