@@ -170,10 +170,11 @@ class UIContainer extends Container {
         // add our audio control object
         this.addChild(new AudioControl(36, 56));
 
-        if (!device.isMobile) {
-            // add our fullscreen control object
-            this.addChild(new FSControl(36 + 10 + 48, 56));
-        }
+        // モバイル端末ではフルスクリーンボタンを表示しない
+        //if (!device.isMobile) {
+        // add our fullscreen control object
+        this.addChild(new FSControl(36 + 10 + 48, 56));
+        //}
     }
 };
 

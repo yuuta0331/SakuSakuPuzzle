@@ -1,6 +1,5 @@
 import { game, audio, input, Stage, ColorLayer, BitmapText, Sprite, loader, state } from "melonjs";
 import { bindKeys, unbindKeys, bindGamepads, unbindGamepads } from "../util/constants";
-import UIContainer from "../entities/HUD";
 import g_game from "../../game";
 
 export default class TitleScreen extends Stage {
@@ -72,12 +71,6 @@ export default class TitleScreen extends Stage {
 
         // reset the score
         g_game.data.score = 0;
-
-        // add our HUD to the game world
-        if (typeof this.HUD === "undefined") {
-            this.HUD = new UIContainer();
-        }
-        game.world.addChild(this.HUD);
     }
 
     onDestroyEvent() {
@@ -85,10 +78,6 @@ export default class TitleScreen extends Stage {
         //unbindKeys();
         unbindGamepads();
         audio.stopTrack();
-
-        // HUDの削除
-        game.world.removeChild(this.HUD);
-        this.HUD = undefined;
 
         // メニュー項目の削除
         this.menuItems.forEach(item => game.world.removeChild(item));

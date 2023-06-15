@@ -27,7 +27,7 @@ import VirtualJoypad from './js/entities/controls.js';
 import UIContainer from './js/entities/HUD.js';
 import Cursor from './js/entities/cursor.js';
 import DataManifest from 'manifest.js';
-import { bindKeys, unbindKeys } from "./js/util/constants";
+import {bindKeys} from "./js/util/constants";
 // TODO オリジナルのロード画面を作成する
 //import CustomLoadingScreen from './js/stage/custom_loading_screen.js';
 
@@ -68,6 +68,7 @@ device.onReady(() => {
     loader.crossOrigin = "anonymous";
 
     let virtualJoypad; // Define virtualJoypad outside the callback 
+    let hud;
 
     // set and load all resources.
     loader.preload(DataManifest, function () {
@@ -127,6 +128,11 @@ device.onReady(() => {
                 virtualJoypad = new VirtualJoypad();
             }
             game.world.addChild(virtualJoypad);
+        }
+
+        if (typeof hud === "undefined") {
+            hud = new UIContainer();
+            game.world.addChild(hud);
         }
     });
 });
