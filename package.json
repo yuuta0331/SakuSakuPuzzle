@@ -5,11 +5,11 @@
   "author": "Olivier Biot",
   "license": "MIT",
   "devDependencies": {
-    "@melonjs/debug-plugin": "^14.5.2",
     "@babel/cli": "^7.21.5",
     "@babel/core": "^7.21.8",
     "@babel/preset-env": "^7.21.5",
     "@babel/register": "^7.21.0",
+    "@melonjs/debug-plugin": "^14.5.2",
     "babel-loader": "^9.1.2",
     "copy-webpack-plugin": "^11.0.0",
     "favicons": "^7.1.2",
@@ -26,7 +26,7 @@
     "build": "webpack --mode=production --config webpack.config.js"
   },
   "dependencies": {
-    "core-js": "^3.30.1",
+    "core-js": "^3.31.0",
     "css-loader": "^6.7.3",
     "melonjs": "^15.1.5",
     "style-loader": "^3.3.2"
