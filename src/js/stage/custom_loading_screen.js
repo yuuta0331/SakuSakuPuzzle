@@ -1,6 +1,6 @@
 //import { game } from "../index.js";
-import { game, event, audio, input, Stage, ColorLayer, BitmapText, Sprite, state, Renderable, loader } from "melonjs";
-import logo_url from "../../favicon/logo.png";
+import {game, event, Stage, ColorLayer, Text, Renderable, loader, Sprite} from "melonjs";
+//import logo_url from "../../favicon/logo.png";
 
 
 // a basic progress bar object
@@ -69,29 +69,62 @@ class CustomLoadingScreen extends Stage {
     onResetEvent() {
         const barHeight = 8;
 
+        //this.backgroundImg = loader.getImage("title_background");
+
+        // const backgroundImage = new Sprite(0, 0, {
+        //     image: loader.getImage('logo'),
+        // });
+        // backgroundImage.scale(game.viewport.width / backgroundImage.width, game.viewport.height / backgroundImage.height);
+        // game.world.addChild(backgroundImage, 0);
+
+        game.world.addChild(new ColorLayer('background', '#F8E860'));
+        // loader.load({ name: "funwari-round", type: "image", src: "./data/fnt/funwariround-brown.png" });
+        // loader.load({ name: "funwari-round", type: "binary", src: "./data/fnt/funwariround-brown.fnt" });
+        //
+        // game.world.addChild(new BitmapText(game.viewport.width / 2, game.viewport.height / 2 - game.viewport.height / 4 - 100, {
+        //     font: "funwari-round",
+        //     size: 3.2,
+        //     textBaseline: "middle",
+        //     textAlign: "center",
+        //     fillStyle: "white",
+        //     text: "さくさくパズル",
+        //     lineWidth: 1.
+        // }));
+
+        game.world.addChild(new Text(game.viewport.width / 2, game.viewport.height / 2 - 200, {
+            font: "funwari-round_brown",
+            size: 200,
+            fillStyle: "#FFFFFF",
+            strokeStyle: "#000000",
+            text: "Loading...",
+            textAlign: "center",
+            textBaseline: "top"
+        }));
+
         // set a background color
-        game.world.backgroundColor.parseCSS("#202020");
+        // game.world.backgroundColor.parseCSS("#202020");
 
         // progress bar
-        game.world.addChild(new ProgressBar(
-            0,
-            renderer.getHeight() / 2,
-            renderer.getWidth(),
-            barHeight
-        ), 1);
+        // game.world.addChild(new ProgressBar(
+        //     0,
+        //     renderer.getHeight() / 2,
+        //     renderer.getWidth(),
+        //     barHeight
+        // ), 1);
+
 
         // load the melonJS logo
-        loader.load({name: "melonjs_logo", type: "image", src: logo_url}, () => {
-            // melonJS logo
-            game.world.addChild(new Sprite(
-                renderer.getWidth() / 2,
-                renderer.getHeight() / 2, {
-                    image : "melonjs_logo",
-                    framewidth : 256,
-                    frameheight : 256
-                }), 2
-            );
-        });
+        // loader.load({name: "logo.png", type: "image", src: logo_url}, () => {
+        //     // melonJS logo
+        //     game.world.addChild(new Sprite(
+        //         renderer.getWidth() / 2,
+        //         renderer.getHeight() / 2, {
+        //             image : "logo",
+        //             framewidth : 256,
+        //             frameheight : 256
+        //         }), 2
+        //     );
+        // });
     }
 
     /**
@@ -100,7 +133,7 @@ class CustomLoadingScreen extends Stage {
      */
     onDestroyEvent() {
         // cancel the callback
-        loader.unload({name: "melonjs_logo", type:"image"});
+        // loader.unload({name: "melonjs_logo", type:"image"});
     }
 }
 

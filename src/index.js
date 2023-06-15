@@ -28,15 +28,15 @@ import UIContainer from './js/entities/HUD.js';
 import Cursor from './js/entities/cursor.js';
 import DataManifest from 'manifest.js';
 import {bindKeys} from "./js/util/constants";
-// TODO オリジナルのロード画面を作成する
-//import CustomLoadingScreen from './js/stage/custom_loading_screen.js';
+
+import CustomLoadingScreen from './js/stage/custom_loading_screen.js';
 
 
 device.onReady(() => {
 
-    // state.set(me.state.LOADING, new game.MyLoadingScreen());
+    state.set(state.LOADING, new CustomLoadingScreen());
 
-    // state.change(me.state.LOADING);
+    // state.change(state.LOADING);
 
     // load everything & display a loading screen
     // initialize the display canvas once the device/browser is ready
