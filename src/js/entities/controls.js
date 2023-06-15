@@ -1,20 +1,20 @@
 
 //import game from '../game.js';
-import { game, event, input, Sprite, GUI_Object, Vector2d, Container, loader, TextureAtlas } from "melonjs";
+import {game, event, input, Sprite, UISpriteElement, Vector2d, Container, loader, TextureAtlas} from "melonjs";
 import g_game from '../../game.js';
 
 /**
  * a basic control to toggle fullscreen on/off
  */
 
-class Button extends GUI_Object {
+class Button extends UISpriteElement {
     /**
      * constructor
      */
     constructor(x, y) {
         super(x, y, {
             image: g_game.texture,
-            region : "shadedDark36.png"
+            region: "shadedDark36.png"
         });
         this.setOpacity(0.25);
         this.anchorPoint.set(0, 0);
@@ -39,11 +39,11 @@ class Button extends GUI_Object {
     }
 };
 
-class BButton extends GUI_Object {
+class BButton extends UISpriteElement {
     constructor(x, y) {
         super(x, y, {
             image: g_game.texture,
-            region : "shadedDark36.png"
+            region: "shadedDark36.png"
         });
         this.setOpacity(0.25);
         this.anchorPoint.set(0, 0);
@@ -63,11 +63,10 @@ class BButton extends GUI_Object {
 };
 
 
-
 /**
  * a virtual joypad
  */
-class Joypad extends GUI_Object {
+class Joypad extends UISpriteElement {
     /**
      * constructor
      */
@@ -75,8 +74,8 @@ class Joypad extends GUI_Object {
         super(x, y, {
             // background "fix" part of the joypad
             image: g_game.texture,
-            region : "shadedDark07.png",
-            anchorPoint : new Vector2d(0, 0)
+            region: "shadedDark07.png",
+            anchorPoint: new Vector2d(0, 0)
         });
 
         // mobile part of the joypad

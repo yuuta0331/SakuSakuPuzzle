@@ -4,23 +4,22 @@ import {
     device,
     event,
     BitmapText,
-    GUI_Object,
     Container,
-    Vector2d
+    Vector2d, UISpriteElement
 } from "melonjs";
 import g_game from './../../game.js';
 
 /**
  * a basic control to toggle fullscreen on/off
  */
-class FSControl extends GUI_Object {
+class FSControl extends UISpriteElement {
     /**
      * constructor
      */
     constructor(x, y) {
         super(x, y, {
             image: g_game.texture,
-            region : "shadedDark30.png"
+            region: "shadedDark30.png"
         });
         this.setOpacity(0.5);
     }
@@ -55,14 +54,14 @@ class FSControl extends GUI_Object {
 /**
  * a basic control to toggle fullscreen on/off
  */
-class AudioControl extends GUI_Object {
+class AudioControl extends UISpriteElement {
     /**
      * constructor
      */
     constructor(x, y) {
         super(x, y, {
             image: g_game.texture,
-            region : "shadedDark13.png" // ON by default
+            region: "shadedDark13.png" // ON by default
         });
         this.setOpacity(0.5);
         this.isMute = false;
