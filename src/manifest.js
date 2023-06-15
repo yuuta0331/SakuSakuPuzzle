@@ -29,6 +29,16 @@ const DataManifest = [
         src: "./data/img/title_background.png"
     },
     {
+        name: "help1_background",
+        type: "image",
+        src: "./data/img/scene_background/help1_background.jpg"
+    },
+    {
+        name: "help2_background",
+        type: "image",
+        src: "./data/img/scene_background/help2_background.jpg"
+    },
+    {
         name: "gamemain_background",
         type: "image",
         src: "./data/img/game_main_background.png"
