@@ -1,8 +1,24 @@
-import { Stage, audio, game, ColorLayer, ImageLayer, BitmapText, Sprite, loader, Rect, Renderable, plugins, device } from 'melonjs';
+import {
+    Stage,
+    audio,
+    game,
+    ColorLayer,
+    ImageLayer,
+    BitmapText,
+    Sprite,
+    loader,
+    Rect,
+    Renderable,
+    device,
+    timer, state
+} from 'melonjs';
 import Cursor from '../entities/cursor.js';
 import VirtualJoypad from '../entities/controls.js';
 import Block from '../renderables/block.js';
 import BlockGrid from '../renderables/block_grid.js';
+import CircularProgressBar from '../renderables/circular_progress_bar.js';
+import g_game from "../../game";
+import {unbindGamepads, unbindKeys} from "../util/constants";
 
 class MyRectangle extends Renderable {
     constructor(x, y, width, height, color) {
@@ -25,24 +41,18 @@ class TransparentBlock extends Block {
     }
 }
 
-class BlockPiece extends Block {
-    constructor(x, y, width, height, color, shape, split) {
-        super(x, y, width / split, height / split, color, shape);
-    }
-}
-
-
 
 class PlayScreen extends Stage {
-    /**
-     *  action to perform on state change
-     */
-
-
 
     onResetEvent() {
 
-        // add a gray background to the default Stage
+        //this.timeLimit = 100;  // ゲームの制限時間 (秒)
+        //this.elapsedTime = 0;  // 経過時間
+        g_game.data.timeLimit = 3;
+        g_game.data.elapsedTime = 0;
+        g_game.data.timeUp = false;
+
+        // 背景を追加
         game.world.addChild(new ColorLayer("background", "#202020"));
 
         let backgroundImage = loader.getImage('gamemain_background');
@@ -51,16 +61,18 @@ class PlayScreen extends Stage {
             width: game.viewport.width,
             height: game.viewport.height,
             repeat: "no-repeat",
-            z: 1 // The z-index. Adjust as needed.
+            z: 1 // z-index
         });
         game.world.addChild(backgroundLayer);
 
-        // let rect1 = new Rect(0,0,game.viewport.width, game.viewport.height);
-        // game.world.addChild(rect1);
         let myRect = new MyRectangle(0, 0, 1050, 2000, '#00FFFF');
         let myRect2 = new MyRectangle(0, 1000, 4000, 400, '#00FFFF');
         game.world.addChild(myRect);
         game.world.addChild(myRect2);
+
+        // 制限時間を表示するプログレスバーを描画
+        let progressBar = new CircularProgressBar(game.viewport.width / 2, game.viewport.height / 2, 50);  // 位置と半径を適切に調整してください。
+        game.world.addChild(progressBar);
 
         game.world.addChild(new BitmapText(260, 80, {
             font: "funwari-round",
@@ -76,7 +88,7 @@ class PlayScreen extends Stage {
         game.world.addChild(timerImage);
 
 
-        // add a font text display object
+        // BitMapTextを描画
         game.world.addChild(new BitmapText(game.viewport.width / 2, game.viewport.height / 2, {
             font: "funwari-round_white",
             size: 2.0,
@@ -87,11 +99,6 @@ class PlayScreen extends Stage {
 
         audio.stopTrack();
         audio.playTrack("gamemain");
-
-        // ブロックを生成
-        // let blockGrid = new BlockGrid(0, 0, 50, 16, 16);
-        // blockGrid.generateBlocks(4, ["red", "blue", "green", "yellow"], ["square", "triangle"]);
-        // game.world.addChild(blockGrid);
 
 
         // お手本となるブロックを描画
@@ -106,8 +113,9 @@ class PlayScreen extends Stage {
         }
 
         // プレイヤーのブロックを描画
-        let blockPeice = new BlockPiece(game.viewport.width / 2, game.viewport.height / 2, 90, 90, "red", "square", 4);
-        game.world.addChild(blockPeice);
+        let splitGrid = new BlockGrid(game.viewport.width / 2, game.viewport.height - 100, 90, 4, 4);
+        this.sampleGrid.splitBlocks(2, splitGrid); // ブロックを2部分に分割し、それらをsplitGridに追加
+        game.world.addChild(splitGrid);
 
 
         // カーソルを描画
@@ -118,16 +126,24 @@ class PlayScreen extends Stage {
         // モバイルデバイスでのみ疑似コントローラーを表示
         // ※一部タブレットでは表示されない。
         if (device.isMobile) {
-            if (typeof this.virtualJoypad === "undefined") {
-                this.virtualJoypad = new VirtualJoypad();
-            }
+            this.virtualJoypad = new VirtualJoypad();
             game.world.addChild(this.virtualJoypad);
         }
     }
 
     onDestroyEvent() {
-        game.world.removeChild(this.cursor);
-        this.cursor = null;
+
+        if (this.cursor && game.world.hasChild(this.cursor)) {
+            game.world.removeChild(this.cursor);
+        }
+
+        unbindKeys();
+        unbindGamepads();
+
+        if (this.virtualJoypad && game.world.hasChild(this.virtualJoypad)) {
+            game.world.removeChild(this.virtualJoypad);
+        }
+
         audio.stopTrack();
     }
 
@@ -137,6 +153,21 @@ class PlayScreen extends Stage {
     //     }
     //     return super.update(dt);
     // }
+
+    update(dt) {
+        g_game.data.elapsedTime += dt / 1000; // 経過時間を秒単位で更新
+        if (g_game.data.elapsedTime > g_game.data.timeLimit) {
+            // 制限時間を超えたときの処理
+            // ゲームオーバー画面に遷移
+            if (!g_game.data.timeUp) {
+                state.change(state.MENU);
+                console.log("Time Up!");
+                g_game.data.timeUp = true; // タイムアップフラグをセット
+            }
+        }
+        return true;
+    }
+
 };
 
 export default PlayScreen;

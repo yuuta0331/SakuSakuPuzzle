@@ -1,5 +1,19 @@
-import { Renderable } from 'melonjs';
+import {Renderable} from 'melonjs';
 import Block from "./block.js";
+
+class BlockPart extends Block {
+    constructor(block, partIndex, totalParts) {
+        let partWidth = block.width / totalParts;
+        let x = block.pos.x + partIndex * partWidth;
+        super(x, block.pos.y, partWidth, block.height, block.color, block.shape);
+        this.block = block;
+        this.partIndex = partIndex;
+        this.rotation = block.rotation; // ブロックの角度を引き継ぐ
+    }
+
+    // ブロック部分を操作するためのメソッドをここに追加
+}
+
 
 export default class BlockGrid extends Renderable {
     constructor(x, y, blockSize, gridWidth, gridHeight) {
@@ -45,7 +59,22 @@ export default class BlockGrid extends Renderable {
     }
 
 
+    // ブロックをその部分に分割し、それらを別のBlockGridに追加する新しいメソッド
+    splitBlocks(parts, targetGrid) {
+        let blockSize = Math.ceil(this.blocks.length / parts); // ブロックの配列を分割するサイズを計算
+        let gap = 100; // ブロック間の間隔
+        for (let i = 0; i < parts; i++) {
+            let blocksPart = this.blocks.slice(i * blockSize, (i + 1) * blockSize); // ブロックの配列を分割
+            blocksPart.forEach((block, index) => {
+                let part = new BlockPart(block, index, blocksPart.length);
+                // splitGridの座標に基づいてBlockPartの座標を設定
+                part.pos.x = targetGrid.pos.x + index * (this.blockSize + gap); // ブロックとブロックの間に間隔を設定
+                part.pos.y = targetGrid.pos.y + index * (this.blockSize + gap);
+                targetGrid.blocks.push(part);
+            });
 
+        }
+    }
 
 
     draw(renderer) {

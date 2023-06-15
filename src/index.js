@@ -25,6 +25,7 @@ import PlayerEntity from 'js/renderables/player.js';
 
 import VirtualJoypad from './js/entities/controls.js';
 import UIContainer from './js/entities/HUD.js';
+import Cursor from './js/entities/cursor.js';
 import DataManifest from 'manifest.js';
 import { bindKeys, unbindKeys } from "./js/util/constants";
 // TODO オリジナルのロード画面を作成する
@@ -89,6 +90,7 @@ device.onReady(() => {
 
         // エンティティプールにプレイヤーエンティティを追加する
         pool.register("mainPlayer", PlayerEntity);
+        pool.register("Cursor", Cursor);
 
 
         // キーボードショートカットを追加する

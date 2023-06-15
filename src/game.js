@@ -8,7 +8,12 @@ var g_game = {
      */
     data : {
         // score
-        score : 0
+        score: 0,
+        // 経過時間
+        elapsedTime: 0,
+        // 制限時間
+        timeLimit: 3,
+        timeUp: false,
     },
 
     // a reference to the texture atlas

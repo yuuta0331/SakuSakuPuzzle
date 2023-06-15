@@ -38,9 +38,6 @@ export default class TitleScreen extends Stage {
             lineWidth: 1.
         }));
 
-        // 以前のメニュー項目の削除
-        // TODO 既に削除されている場合は実行しないようにする必要がある
-        //this.menuItems.forEach(item => game.world.removeChild(item));
 
         // 文字列の最小Y座標
         const base_y = 480;
@@ -88,6 +85,14 @@ export default class TitleScreen extends Stage {
         //unbindKeys();
         unbindGamepads();
         audio.stopTrack();
+
+        // HUDの削除
+        game.world.removeChild(this.HUD);
+        this.HUD = undefined;
+
+        // メニュー項目の削除
+        this.menuItems.forEach(item => game.world.removeChild(item));
+        this.menuItems = [];
     }
 
     // メニュー項目を作成するためのヘルパーメソッド

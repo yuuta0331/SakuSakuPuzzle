@@ -1,5 +1,5 @@
-import { game, event, input, Renderable, loader, Sprite } from "melonjs";
-import { bindKeys, unbindKeys, bindGamepads, unbindGamepads } from "../util/constants";
+import {game, event, input, Renderable, loader, Sprite, pool} from "melonjs";
+import {bindKeys, unbindKeys, bindGamepads, unbindGamepads} from "../util/constants";
 
 export default class Cursor extends Sprite {
     constructor(x, y) {
@@ -9,6 +9,13 @@ export default class Cursor extends Sprite {
             frameheight: 100
         };
         super(x, y, settings);
+
+        // メンバ変数posを初期化する
+        this.pos = {
+            x: 0,
+            y: 0,
+        };
+
 
         // カーソルの移動速度
         this.speed = 12;
@@ -20,7 +27,7 @@ export default class Cursor extends Sprite {
 
 
         const self = this; // ここでthis（Cursorインスタンス）をselfに保存します
-        input.registerPointerEvent('pointermove', game.viewport, function(event) {
+        input.registerPointerEvent('pointermove', game.viewport, function (event) {
             self.pointerMove(event); // selfを使用してpointerMoveを呼び出します
         });
         // TODO 負荷が高いので、マウスポインタの位置を取得する処理は、改善が必要
@@ -30,6 +37,9 @@ export default class Cursor extends Sprite {
         bindGamepads();
 
         bindKeys();
+
+        // Cursorのオブジェクトプールを作成します。
+        // pool.register("cursor", Cursor);
     }
 
     pointerMove(event) {
@@ -138,12 +148,27 @@ export default class Cursor extends Sprite {
         return moved;
     }
 
-    onDestroyEvent() {
+    destroy() {
 
-        // release register event event
-        me.input.releasePointerEvent("pointermove", this);
+        input.releasePointerEvent("pointermove", this);
 
         unbindKeys();
         unbindGamepads();
+
+        // 親クラスのdestroyメソッドを呼び出します。
+        //super.destroy();
     }
+
+
+    // onDestroyEvent() {
+    //
+    //     // release register event event
+    //     input.releasePointerEvent("pointermove", this);
+    //
+    //     unbindKeys();
+    //     unbindGamepads();
+    // }
+
 }
+
+//pool.register("Cursor", Cursor);
