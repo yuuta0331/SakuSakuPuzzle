@@ -160,7 +160,7 @@ class PlayScreen extends Stage {
             // 制限時間を超えたときの処理
             // ゲームオーバー画面に遷移
             if (!g_game.data.timeUp) {
-                state.change(state.MENU);
+                state.change(state.GAMEOVER);
                 console.log("Time Up!");
                 g_game.data.timeUp = true; // タイムアップフラグをセット
             }

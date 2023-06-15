@@ -19,6 +19,7 @@ import g_game from './game.js';
 
 import TitleScreen from 'js/stage/title.js';
 import PlayScreen from 'js/stage/play.js';
+import GameOverScreen from './js/stage/gameover.js';
 import HelpScreen from './js/stage/help';
 import RankingScreen from './js/stage/ranking';
 import PlayerEntity from 'js/renderables/player.js';
@@ -86,6 +87,7 @@ device.onReady(() => {
         // ユーザー定義ゲームステージを設定する
         state.set(state.MENU, new TitleScreen());
         state.set(state.PLAY, new PlayScreen());
+        state.set(state.GAMEOVER, new GameOverScreen());
         state.set(state.SETTINGS, new HelpScreen());
         state.set(state.USER, new RankingScreen());
 

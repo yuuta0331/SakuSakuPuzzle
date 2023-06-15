@@ -1,8 +1,8 @@
-import { game, audio, input, Stage, ColorLayer, BitmapText, Sprite, loader, state } from "melonjs";
-import { bindKeys, unbindKeys, bindGamepads, unbindGamepads } from "../util/constants";
+import {game, audio, input, Stage, ColorLayer, BitmapText, Sprite, loader, state} from "melonjs";
+import {bindKeys, bindGamepads, unbindGamepads} from "../util/constants";
 import g_game from "../../game";
 
-export default class TitleScreen extends Stage {
+export default class GameOverScreen extends Stage {
     // メニュー項目
     menuItems = [];
 
@@ -21,15 +21,15 @@ export default class TitleScreen extends Stage {
 
     onResetEvent() {
 
-        game.world.addChild(new ColorLayer('background', '#F8E860'));
+        game.world.addChild(new ColorLayer('background', '#000000'));
 
         game.world.addChild(new BitmapText(game.viewport.width / 2, game.viewport.height / 2 - game.viewport.height / 4 - 100, {
-            font: "funwari-round_brown",
+            font: "funwari-round_white",
             size: 3.2,
             textBaseline: "middle",
             textAlign: "center",
             fillStyle: "white",
-            text: "さくさくパズル",
+            text: "F i n i shed ! !",
             lineWidth: 1.
         }));
 
@@ -41,7 +41,7 @@ export default class TitleScreen extends Stage {
         const margin_y = 140;
 
         // メニュー項目の文字列
-        const menuTexts = ["ぷれい", "へるぷ", "らんきんぐ", "しゅうりょう"];
+        const menuTexts = ["たいとる"];
 
         // メニュー項目の作成
         this.menuItems = menuTexts.map((text, index) =>
@@ -63,7 +63,7 @@ export default class TitleScreen extends Stage {
         //input.bindPointer(input.pointer.LEFT, input.KEY.ENTER);
 
         audio.stopTrack();
-        audio.playTrack("title");
+        audio.playTrack("result");
 
         // reset the score
         g_game.data.score = 0;
@@ -82,7 +82,12 @@ export default class TitleScreen extends Stage {
 
     // メニュー項目を作成するためのヘルパーメソッド
     createMenuItem(text, x, y) {
-        const menuItem = new BitmapText(x, y, { text: text, font: "funwari-round", size: 1.5, textAlign: "center" });
+        const menuItem = new BitmapText(x, y, {
+            text: text,
+            font: "funwari-round_white",
+            size: 1.5,
+            textAlign: "center"
+        });
 
         // マウスクリックイベントのリスナーを追加
         // menuItem.pointerEvent.subscribe("pointerdown", () => {
@@ -129,18 +134,20 @@ export default class TitleScreen extends Stage {
             this.inputMargin++;
         } else {
             if (input.isKeyPressed("up")) {
-                
+
                 audio.play("cursor_move");
                 this.selectMenuItem((this.selectedMenuItemIndex - 1 + this.menuItems.length) % this.menuItems.length);
                 this.inputMargin = 0;
-            };
+            }
+            ;
 
             if (input.isKeyPressed("down")) {
-                
+
                 audio.play("cursor_move");
                 this.selectMenuItem((this.selectedMenuItemIndex + 1) % this.menuItems.length);
                 this.inputMargin = 0;
-            };
+            }
+            ;
 
             //エンターキーまたはゲームパッドのAボタンが押されたとき
             if (input.isKeyPressed("enter")) {
@@ -148,22 +155,12 @@ export default class TitleScreen extends Stage {
                 switch (this.selectedMenuItemIndex) {
                     case 0:
                         //game.changeScene(state.PLAY);
-                        state.change(state.PLAY);
-                        break;
-                    case 1:
-                        //game.changeScene(HelpScene);
-                        state.change(state.SETTINGS);
-                        break;
-                    case 2:
-                        //game.changeScene(RankingScene);
-                        state.change(state.USER);
-                        break;
-                    case 3:
-                        //game.changeScene(EndScene);
+                        state.change(state.MENU);
                         break;
                 }
                 this.inputMargin = 0;
-            };
+            }
+            ;
         }
     }
 
