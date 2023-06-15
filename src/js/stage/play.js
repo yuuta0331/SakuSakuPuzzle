@@ -48,7 +48,7 @@ class PlayScreen extends Stage {
 
         //this.timeLimit = 100;  // ゲームの制限時間 (秒)
         //this.elapsedTime = 0;  // 経過時間
-        g_game.data.timeLimit = 3;
+        g_game.data.timeLimit = 30;
         g_game.data.elapsedTime = 0;
         g_game.data.timeUp = false;
 
@@ -104,10 +104,12 @@ class PlayScreen extends Stage {
         // お手本となるブロックを描画
         this.sampleGrid = new BlockGrid(250, 300, 90, 2, 2);
         let blocks = this.sampleGrid.generateBlocks(4, ["red", "blue", "green", "yellow"], ["square", "triangle"]);
+
+        let centerGrid;
         if (blocks) {
             game.world.addChild(this.sampleGrid);
 
-            let centerGrid = new BlockGrid(game.viewport.width / 2 + 400, game.viewport.height / 2 - 100, 90, 4, 4);
+            centerGrid = new BlockGrid(game.viewport.width / 2 + 400, game.viewport.height / 2 - 100, 90, 4, 4);
             centerGrid.addBlocks(blocks, 0.5, this.sampleGrid.x_position, this.sampleGrid.y_position);
             game.world.addChild(centerGrid);
         }
@@ -119,7 +121,7 @@ class PlayScreen extends Stage {
 
 
         // カーソルを描画
-        this.cursor = new Cursor(game.viewport.width / 2, game.viewport.height / 2);
+        this.cursor = new Cursor(game.viewport.width / 2, game.viewport.height / 2, splitGrid, centerGrid);
         game.world.addChild(this.cursor);
 
         // display if debugPanel is enabled or on mobile

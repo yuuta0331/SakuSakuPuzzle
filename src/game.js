@@ -12,7 +12,7 @@ var g_game = {
         // 経過時間
         elapsedTime: 0,
         // 制限時間
-        timeLimit: 3,
+        timeLimit: 30,
         timeUp: false,
     },
 

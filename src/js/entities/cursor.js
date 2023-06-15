@@ -2,13 +2,18 @@ import {game, event, input, Renderable, loader, Sprite, pool} from "melonjs";
 import {bindKeys, unbindKeys, bindGamepads, unbindGamepads} from "../util/constants";
 
 export default class Cursor extends Sprite {
-    constructor(x, y) {
+    constructor(x, y, splitGrid, centerGrid) {
         const settings = {
             image: loader.getImage('cursor'), // ここでカーソルの画像を読み込む
             framewidth: 140,
             frameheight: 100
         };
         super(x, y, settings);
+
+        this.grabbedBlock = null; // 掴んでいるブロック
+        this.centerGrid = centerGrid; // お手本ブロック
+
+        this.splitGrid = splitGrid;
 
         // メンバ変数posを初期化する
         this.pos = {
@@ -69,6 +74,23 @@ export default class Cursor extends Sprite {
         // this.pos.y = y;
         // });
 
+        // ブロックが掴まれている場合、その位置をカーソルに追従させる
+        if (this.grabbedBlock) {
+            this.grabbedBlock.pos.x = this.pos.x;
+            this.grabbedBlock.pos.y = this.pos.y;
+        }
+
+        // Aボタンが押されたときにブロックをつかむ
+        if (this.grabbedBlock === null && input.isKeyPressed('enter')) {
+            this.grabBlock();
+        }
+
+        // Aボタンが離されたときにブロックをドロップする
+        if (this.grabbedBlock !== null && !input.isKeyPressed('enter')) {
+            //this.dropBlock();
+            this.releaseBlock();
+        }
+
         const moving = this.handleInput();
 
         // 位置が変更された場合のみ、再描画を行う
@@ -79,6 +101,51 @@ export default class Cursor extends Sprite {
         //return super.update(dt);
         return moving;
     }
+
+    grabBlock() {
+        // splitGrid からブロックをつかむ
+        if (!this.grabbedBlock) {
+            let blockIndex = this.getBlockIndex(this.splitGrid);
+            if (blockIndex !== -1) {
+                this.grabbedBlock = this.splitGrid.blocks.splice(blockIndex, 1)[0];
+            }
+        }
+    }
+
+    releaseBlock() {
+        // centerGrid にブロックを置く
+        if (this.grabbedBlock && this.centerGrid) {
+            this.grabbedBlock.pos.x = this.pos.x;
+            this.grabbedBlock.pos.y = this.pos.y;
+            this.centerGrid.blocks.push(this.grabbedBlock);
+            this.grabbedBlock = null;
+        }
+    }
+
+
+    getBlockIndex(grid) {
+        // grid のブロックの中でカーソルがその領域内にあるものを探す
+        for (let i = 0; i < grid.blocks.length; i++) {
+            let block = grid.blocks[i];
+            if (this.pos.x >= block.pos.x && this.pos.x <= block.pos.x + block.width &&
+                this.pos.y >= block.pos.y && this.pos.y <= block.pos.y + block.height) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    dropBlock() {
+        if (this.grabbedBlock) {
+            this.centerBlock.addBlock(this.grabbedBlock);
+            this.grabbedBlock = null;
+            if (this.centerBlock.matches(this.sampleGrid)) {
+                // centerGridがsampleGridと一致しているときの処理を書く
+            }
+        }
+    }
+
 
     handleInput() {
 
