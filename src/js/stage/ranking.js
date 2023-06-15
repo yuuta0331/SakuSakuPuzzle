@@ -37,10 +37,10 @@ class RankingScreen extends Stage {
         audio.stopTrack();
 
         // キーボードとゲームパッドのイベントの解除
-            input.unbindKey(input.KEY.ENTER);
-            input.unbindKey(input.KEY.BACKSPACE);
-            input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_1);
-            input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_2);
+        input.unbindKey(input.KEY.ENTER);
+        input.unbindKey(input.KEY.BACKSPACE);
+        input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_1);
+        input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_2);
     }
 
     update(dt) {
@@ -71,30 +71,15 @@ class RankingScreen extends Stage {
                     score: childSnapshot.val().score
                 });
             });
-            // Call `drawRanking()` only when the data is fetched from the database
             this.drawRanking();
         });
     }
-
-    // displayRanking() {
-    //     var scoresRef = firebase.database().ref('scores');
-    //     scoresRef.orderByChild('score').limitToLast(10).on('value', snapshot => {
-    //         this.ranking = [];
-    //         snapshot.forEach(childSnapshot => {
-    //             this.ranking.unshift({
-    //                 name: childSnapshot.val().name,
-    //                 score: childSnapshot.val().score
-    //             });
-    //         });
-    //         this.drawRanking();
-    //     });
-    // }
 
     drawRanking() {
         // Clear the existing ranking
         // Check if rankingContainer exists and destroy it
         if (this.rankingContainer) {
-            game.world.removeChild(this.rankingContainer);
+            game.world.removeChildNow(this.rankingContainer);
             this.rankingContainer.destroy();
         }
 
@@ -103,7 +88,13 @@ class RankingScreen extends Stage {
         game.world.addChild(this.rankingContainer, 1);
 
         // Draw each ranking entry
-        for (let i = 0; i < this.ranking.length; i++) {
+        // const rankingTitle = new BitmapText(200, 20, {font: "funwari-round_white", text: "Ranking"});
+        // this.rankingContainer.addChild(rankingTitle);
+
+        //const rankingNum = this.ranking.length;
+        const rankingNum = 4;
+
+        for (let i = 0; i < rankingNum; i++) {
             let y = 50 + i * 100;
             let entry = this.ranking[i];
 
