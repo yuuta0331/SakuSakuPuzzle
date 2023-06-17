@@ -86,7 +86,6 @@ class RankingScreen extends Stage {
 
     update(dt) {
         if (!this.isTransitioning && input.isKeyPressed("back")) {
-            console.log("back")
             this.isTransitioning = true;
             state.change(state.MENU);
         }
