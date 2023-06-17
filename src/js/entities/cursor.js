@@ -1,4 +1,4 @@
-import {game, event, input, Renderable, loader, Sprite, pool} from "melonjs";
+import {game, event, input, Renderable, loader, Sprite, pool, device} from "melonjs";
 import {bindKeys, unbindKeys, bindGamepads, unbindGamepads} from "../util/constants";
 
 export default class Cursor extends Sprite {
@@ -17,8 +17,8 @@ export default class Cursor extends Sprite {
 
         // メンバ変数posを初期化する
         this.pos = {
-            x: 0,
-            y: 0,
+            x: game.viewport.width / 2,
+            y: game.viewport.height / 2,
         };
 
 
@@ -31,11 +31,14 @@ export default class Cursor extends Sprite {
         //input.registerPointerEvent('pointermove', game.viewport, this.pointerMove.bind(this));
 
 
-        const self = this; // ここでthis（Cursorインスタンス）をselfに保存します
-        input.registerPointerEvent('pointermove', game.viewport, function (event) {
-            self.pointerMove(event); // selfを使用してpointerMoveを呼び出します
-        });
-        // TODO 負荷が高いので、マウスポインタの位置を取得する処理は、改善が必要
+        // モバイルデバイスの場合はカーソルをタッチで動かせないようにする
+        if (!device.isMobile) {
+            const self = this; // ここでthis（Cursorインスタンス）をselfに保存します
+            input.registerPointerEvent('pointermove', game.viewport, function (event) {
+                self.pointerMove(event); // selfを使用してpointerMoveを呼び出します
+            });
+            // TODO 負荷が高いので、マウスポインタの位置を取得する処理は、改善が必要
+        }
 
 
         // ゲームパッド入力を有効にする
