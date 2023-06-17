@@ -21,6 +21,9 @@ export default class TitleScreen extends Stage {
 
     onResetEvent() {
 
+        // 画面推移中かどうか
+        this.isTransitioning = false;
+
         game.world.addChild(new ColorLayer('background', '#F8E860'));
 
         game.world.addChild(new BitmapText(game.viewport.width / 2, game.viewport.height / 2 - game.viewport.height / 4 - 100, {
@@ -125,15 +128,19 @@ export default class TitleScreen extends Stage {
 
     // キーボードとゲームパッドのイベントを購読するためのヘルパーメソッド
     subscribeToInputEvents() {
+        // シーン切り替え中であればキー入力を無視
+        if (this.isTransitioning) return;
+
         if (this.inputMargin < this.maxInputMargin) {
             this.inputMargin++;
         } else {
             if (input.isKeyPressed("up")) {
-                
+
                 audio.play("cursor_move");
                 this.selectMenuItem((this.selectedMenuItemIndex - 1 + this.menuItems.length) % this.menuItems.length);
                 this.inputMargin = 0;
-            };
+            }
+            ;
 
             if (input.isKeyPressed("down")) {
                 
@@ -144,6 +151,7 @@ export default class TitleScreen extends Stage {
 
             //エンターキーまたはゲームパッドのAボタンが押されたとき
             if (input.isKeyPressed("enter")) {
+                this.isTransitioning = true;
                 audio.play("enter");
                 switch (this.selectedMenuItemIndex) {
                     case 0:
