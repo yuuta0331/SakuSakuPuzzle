@@ -35,6 +35,7 @@ class RankingScreen extends Stage {
 
         this.ranking = [];
 
+        this.isTransitioning = false;
 
         // add a gray background to the default Stage
         game.world.addChild(new ColorLayer("background", "#F8E860"), 1);
@@ -59,6 +60,7 @@ class RankingScreen extends Stage {
         // キーボードのイベントをアクションとしてバインド
         input.bindKey(input.KEY.ENTER, "enter");
         input.bindKey(input.KEY.BACKSPACE, "back");
+        input.bindKey(input.KEY.B, "back");
 
         // ゲームパッドのボタンをキーボードのキーにマッピング
         input.bindGamepad(0, {type: "buttons", code: input.GAMEPAD.BUTTONS.FACE_1}, input.KEY.ENTER);
@@ -75,14 +77,17 @@ class RankingScreen extends Stage {
         audio.stopTrack();
 
         // キーボードとゲームパッドのイベントの解除
-        input.unbindKey(input.KEY.ENTER);
-        input.unbindKey(input.KEY.BACKSPACE);
-        input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_1);
-        input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_2);
+        // input.unbindKey(input.KEY.ENTER);
+        // input.unbindKey(input.KEY.BACKSPACE);
+        // input.unbindKey(input.KEY.B);
+        // input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_1);
+        // input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_2);
     }
 
     update(dt) {
-        if (input.isKeyPressed("back")) {
+        if (!this.isTransitioning && input.isKeyPressed("back")) {
+            console.log("back")
+            this.isTransitioning = true;
             state.change(state.MENU);
         }
         // else if (input.isKeyPressed("enter")) {
