@@ -70,9 +70,6 @@ class PlayScreen extends Stage {
         game.world.addChild(myRect);
         game.world.addChild(myRect2);
 
-        // 制限時間を表示するプログレスバーを描画
-        let progressBar = new CircularProgressBar(game.viewport.width / 2, game.viewport.height / 2, 50);  // 位置と半径を適切に調整してください。
-        game.world.addChild(progressBar);
 
         game.world.addChild(new BitmapText(260, 80, {
             font: "funwari-round",
@@ -100,6 +97,10 @@ class PlayScreen extends Stage {
         audio.stopTrack();
         audio.playTrack("gamemain");
 
+        // 制限時間を表示するプログレスバーを描画
+        let progressBar = new CircularProgressBar(game.viewport.width / 2, game.viewport.height / 2, 105);
+        game.world.addChild(progressBar);
+
 
         // お手本となるブロックを描画
         this.sampleGrid = new BlockGrid(250, 300, 90, 2, 2);
@@ -116,7 +117,7 @@ class PlayScreen extends Stage {
 
         // プレイヤーのブロックを描画
         let splitGrid = new BlockGrid(game.viewport.width / 2, game.viewport.height - 100, 90, 4, 4);
-        this.sampleGrid.splitBlocks(2, splitGrid); // ブロックを2部分に分割し、それらをsplitGridに追加
+        this.sampleGrid.splitBlocks(2, 2, splitGrid); // ブロックを2部分に分割し、それらをsplitGridに追加
         game.world.addChild(splitGrid);
 
 
