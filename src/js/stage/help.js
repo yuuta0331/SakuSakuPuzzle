@@ -51,6 +51,7 @@ export default class HelpScreen extends Stage {
         input.bindKey(input.KEY.LEFT, "left");
         input.bindKey(input.KEY.RIGHT, "right");
         input.bindKey(input.KEY.ENTER, "enter");
+        input.bindKey(input.KEY.B, "return");
         input.bindKey(input.KEY.BACKSPACE, "return");
 
         // ゲームパッドのボタンをキーボードのキーにマッピング

@@ -59,6 +59,7 @@ class RankingScreen extends Stage {
         // キーボードのイベントをアクションとしてバインド
         input.bindKey(input.KEY.ENTER, "enter");
         input.bindKey(input.KEY.BACKSPACE, "back");
+        input.bindKey(input.KEY.B, "back");
 
         // ゲームパッドのボタンをキーボードのキーにマッピング
         input.bindGamepad(0, {type: "buttons", code: input.GAMEPAD.BUTTONS.FACE_1}, input.KEY.ENTER);
@@ -77,6 +78,7 @@ class RankingScreen extends Stage {
         // キーボードとゲームパッドのイベントの解除
         input.unbindKey(input.KEY.ENTER);
         input.unbindKey(input.KEY.BACKSPACE);
+        input.unbindKey(input.KEY.B);
         input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_1);
         input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_2);
     }
