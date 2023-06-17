@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'funwari_round';
+    src: url('./data/fnt/funwari_round.ttf') format('truetype');
+}
+
 body {
 
     background-color: black;

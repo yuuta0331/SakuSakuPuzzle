@@ -1,4 +1,33 @@
-import {game, audio, input, Stage, ColorLayer, BitmapText, Sprite, loader, state, Container} from "melonjs";
+import {
+    game,
+    audio,
+    input,
+    Stage,
+    ColorLayer,
+    BitmapText,
+    state,
+    Container,
+    Renderable, Text
+} from "melonjs";
+
+class DebugRect extends Renderable {
+    constructor(x, y, w, h) {
+        super(x, y, w, h);
+
+        this.fillColor = "rgba(255, 0, 0, 0.5)";  // 赤色で半透明の背景
+        this.strokeColor = "blue";  // 枠線の色は青
+        this.lineWidth = 2;  // 枠線の太さは2
+    }
+
+    draw(renderer) {
+        renderer.setColor(this.fillColor);
+        renderer.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+
+        renderer.setColor(this.strokeColor);
+        renderer.strokeRect(this.pos.x, this.pos.y, this.width, this.height);
+    }
+}
+
 
 class RankingScreen extends Stage {
 
@@ -6,17 +35,26 @@ class RankingScreen extends Stage {
 
         this.ranking = [];
 
+
         // add a gray background to the default Stage
-        game.world.addChild(new ColorLayer("background", "#202020"));
+        game.world.addChild(new ColorLayer("background", "#F8E860"), 1);
 
         // add a font text display object
-        game.world.addChild(new BitmapText(game.viewport.width / 2, game.viewport.height / 2, {
-            font: "PressStart2P",
-            size: 4.0,
-            textBaseline: "middle",
-            textAlign: "center",
-            text: "Ranking"
-        }));
+        // game.world.addChild(new BitmapText(game.viewport.width / 2, game.viewport.height / 2, {
+        //     font: "PressStart2P",
+        //     size: 4.0,
+        //     textBaseline: "middle",
+        //     textAlign: "center",
+        //     text: "Ranking"
+        // }));
+
+        let guidText = new Text(100, game.viewport.height * 0.8, {
+            font: "funwari_round",
+            size: 60,
+            text: "B でタイトル",
+            fillStyle: '#FF1508'
+        });
+        game.world.addChild(guidText, 2);
 
         // キーボードのイベントをアクションとしてバインド
         input.bindKey(input.KEY.ENTER, "enter");
@@ -46,9 +84,10 @@ class RankingScreen extends Stage {
     update(dt) {
         if (input.isKeyPressed("back")) {
             state.change(state.MENU);
-        } else if (input.isKeyPressed("enter")) {
-            state.change(state.PLAY);
         }
+        // else if (input.isKeyPressed("enter")) {
+        //     state.change(state.PLAY);
+        // }
         return super.update(dt);
     }
 
@@ -71,44 +110,94 @@ class RankingScreen extends Stage {
                     score: childSnapshot.val().score
                 });
             });
+            // 取得したランキングをデバック出力
+            //console.log("ranking: ", this.ranking);  // Log the retrieved ranking
             this.drawRanking();
         });
     }
 
     drawRanking() {
-        // Clear the existing ranking
-        // Check if rankingContainer exists and destroy it
+
+        const rankingStyles = [
+            {crown: 'gold-crown.png', color: '#FFCC33'},
+            {crown: 'silver-crown.png', color: '#BEBEC0'},
+            {crown: 'bronze-crown.png', color: '#AF7E77'},
+        ];
+
+        // 既存のrankingContainerを削除
         if (this.rankingContainer) {
+            this.rankingContainer.children.forEach(child => {
+                this.rankingContainer.removeChildNow(child);
+            });
+
             game.world.removeChildNow(this.rankingContainer);
-            this.rankingContainer.destroy();
         }
 
-        // Create a new container for the ranking
+        // ランキング用のコンテナを作成
         this.rankingContainer = new Container(game.viewport.width / 3, 0, game.viewport.width, game.viewport.height);
-        game.world.addChild(this.rankingContainer, 1);
+        game.world.addChild(this.rankingContainer, 5);
 
-        // Draw each ranking entry
+        // ランキングタイトルを描画
         // const rankingTitle = new BitmapText(200, 20, {font: "funwari-round_white", text: "Ranking"});
         // this.rankingContainer.addChild(rankingTitle);
 
-        //const rankingNum = this.ranking.length;
-        const rankingNum = 4;
+        const rankingNum = this.ranking.length;
+        //const rankingNum = 4;
+
+        // 枠線や背景色を持つShapeを作成
+        var debugShape = new DebugRect(game.viewport.width / 3, 0, this.rankingContainer.width, this.rankingContainer.height);
+
+        // debugShapeをrankingContainerに追加
+        //this.rankingContainer.addChild(debugShape, 1);
+
 
         for (let i = 0; i < rankingNum; i++) {
             let y = 50 + i * 100;
             let entry = this.ranking[i];
 
+            // ランキングエントリーをデバック出力
+            //console.log("Drawing ranking entry: ", entry);
+
             // Draw the player's rank
-            let rankText = new BitmapText(20, y, {font: "funwari-round_white", text: (i + 1).toString()});
-            this.rankingContainer.addChild(rankText);
+
+            let rankText;
+            let nameText;
+            let scoreText;
+
+            if (i < rankingStyles.length) {
+                rankText = new Text(20, y, {
+                    font: "funwari_round",
+                    size: 48,
+                    text: (i + 1).toString(),
+                    fillStyle: rankingStyles[i].color
+                });
+                nameText = new Text(200, y, {
+                    font: "funwari_round",
+                    size: 48,
+                    text: entry.name,
+                    fillStyle: rankingStyles[i].color
+                });
+                scoreText = new Text(600, y, {
+                    font: "funwari_round",
+                    size: 48,
+                    text: entry.score.toString(),
+                    fillStyle: rankingStyles[i].color
+                });
+            } else {
+                rankText = new BitmapText(20, y, {font: "funwari-round", size: 0.5, text: (i + 1).toString()});
+                nameText = new BitmapText(200, y, {font: "funwari-round", size: 0.5, text: entry.name});
+                scoreText = new BitmapText(600, y, {font: "funwari-round", size: 0.5, text: entry.score.toString()});
+            }
+
+            this.rankingContainer.addChild(rankText, 2);
 
             // Draw the player's name
-            let nameText = new BitmapText(200, y, {font: "funwari-round_white", text: entry.name});
-            this.rankingContainer.addChild(nameText);
+
+            this.rankingContainer.addChild(nameText, 2);
 
             // Draw the player's score
-            let scoreText = new BitmapText(600, y, {font: "funwari-round_white", text: entry.score.toString()});
-            this.rankingContainer.addChild(scoreText);
+
+            this.rankingContainer.addChild(scoreText, 2);
         }
     }
 

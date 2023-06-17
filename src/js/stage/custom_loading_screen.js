@@ -92,7 +92,7 @@ class CustomLoadingScreen extends Stage {
         // }));
 
         game.world.addChild(new Text(game.viewport.width / 2, game.viewport.height / 2 - 200, {
-            font: "funwari-round_brown",
+            font: "funwari_round",
             size: 200,
             fillStyle: "#FFFFFF",
             strokeStyle: "#000000",
