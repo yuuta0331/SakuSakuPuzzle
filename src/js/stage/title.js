@@ -167,6 +167,7 @@ export default class TitleScreen extends Stage {
                         state.change(state.USER);
                         break;
                     case 3:
+                        alert('ゲームを終了するには、このタブを閉じてください。');
                         //game.changeScene(EndScene);
                         break;
                 }
