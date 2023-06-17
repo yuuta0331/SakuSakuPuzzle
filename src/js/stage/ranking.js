@@ -35,6 +35,7 @@ class RankingScreen extends Stage {
 
         this.ranking = [];
 
+        // 画面遷移中かどうかを表すフラグ
         this.isTransitioning = false;
 
         // add a gray background to the default Stage
