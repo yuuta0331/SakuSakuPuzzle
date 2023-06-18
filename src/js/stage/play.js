@@ -48,6 +48,7 @@ class PlayScreen extends Stage {
 
         //this.timeLimit = 100;  // ゲームの制限時間 (秒)
         //this.elapsedTime = 0;  // 経過時間
+        //g_game.data.score = 1000;
         g_game.data.timeLimit = 30;
         g_game.data.elapsedTime = 0;
         g_game.data.timeUp = false;
@@ -136,6 +137,8 @@ class PlayScreen extends Stage {
 
     onDestroyEvent() {
 
+        // スコアをリセット
+        //g_game.data.score = 0;
         if (this.cursor && game.world.hasChild(this.cursor)) {
             game.world.removeChild(this.cursor);
         }
@@ -161,15 +164,43 @@ class PlayScreen extends Stage {
         g_game.data.elapsedTime += dt / 1000; // 経過時間を秒単位で更新
         if (g_game.data.elapsedTime > g_game.data.timeLimit) {
             // 制限時間を超えたときの処理
-            // ゲームオーバー画面に遷移
+
             if (!g_game.data.timeUp) {
-                state.change(state.GAMEOVER);
                 console.log("Time Up!");
                 g_game.data.timeUp = true; // タイムアップフラグをセット
+
+                // Get the lowest score in the ranking
+                this.getLowestScore().then(lowestScore => {
+                    // If the current score is higher than the lowest score in the ranking
+                    console.log("Current Score: " + g_game.data.score);
+                    console.log("Lowest Score: " + lowestScore);
+                    if (g_game.data.score > lowestScore) {
+                        console.log("New Record!");
+                        // Move to the ranking input screen
+                        state.change(state.SCORE);
+                    } else {
+                        // Move to the ranking screen
+                        state.change(state.GAMEOVER);
+                    }
+                });
             }
         }
         return true;
     }
+
+
+    async getLowestScore() {
+        var lowestScore = Number.MAX_VALUE;
+
+        await firebase.database().ref('scores').orderByChild('score').limitToFirst(1).once('value', snapshot => {
+            snapshot.forEach(childSnapshot => {
+                lowestScore = childSnapshot.val().score;
+            });
+        });
+
+        return lowestScore;
+    }
+
 
 };
 

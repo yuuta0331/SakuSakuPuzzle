@@ -22,6 +22,7 @@ import PlayScreen from 'js/stage/play.js';
 import GameOverScreen from './js/stage/gameover.js';
 import HelpScreen from './js/stage/help';
 import RankingScreen from './js/stage/ranking';
+import RankingInputScreen from "./js/stage/ranking_input";
 import PlayerEntity from 'js/renderables/player.js';
 
 import VirtualJoypad from './js/entities/controls.js';
@@ -31,6 +32,7 @@ import DataManifest from 'manifest.js';
 import {bindKeys} from "./js/util/constants";
 
 import CustomLoadingScreen from './js/stage/custom_loading_screen.js';
+
 
 
 device.onReady(() => {
@@ -90,6 +92,7 @@ device.onReady(() => {
         state.set(state.GAMEOVER, new GameOverScreen());
         state.set(state.SETTINGS, new HelpScreen());
         state.set(state.USER, new RankingScreen());
+        state.set(state.SCORE, new RankingInputScreen());
 
         // エンティティプールにプレイヤーエンティティを追加する
         pool.register("mainPlayer", PlayerEntity);
