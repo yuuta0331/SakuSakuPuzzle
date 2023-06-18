@@ -14,7 +14,7 @@ class Button extends UISpriteElement {
     constructor(x, y) {
         super(x, y, {
             image: g_game.texture,
-            region: "shadedDark36.png"
+            region: "A_button.png"
         });
         this.setOpacity(0.25);
         this.anchorPoint.set(0, 0);
@@ -43,7 +43,7 @@ class BButton extends UISpriteElement {
     constructor(x, y) {
         super(x, y, {
             image: g_game.texture,
-            region: "shadedDark36.png"
+            region: "B_button_red.png"
         });
         this.setOpacity(0.25);
         this.anchorPoint.set(0, 0);
