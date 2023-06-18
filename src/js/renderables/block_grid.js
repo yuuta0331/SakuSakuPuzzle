@@ -2,16 +2,24 @@ import {Renderable} from 'melonjs';
 import Block from "./block.js";
 
 class BlockPart extends Block {
-    constructor(block, partIndex) {
-        // let partWidth = block.width / totalParts;
-        let partWidth = block.width;
-
-        let x = block.pos.x + partIndex * partWidth;
-        super(x, block.pos.y, partWidth, block.height, block.color, block.shape);
-        this.block = block;
+    constructor(x, y, width, height, color, shape, alpha, partIndex, totalParts) {
+        super(x, y, width, height, color, shape, alpha);
         this.partIndex = partIndex;
-        this.rotation = block.rotation; // ブロックの角度を引き継ぐ
+        this.totalParts = totalParts;
+        console.log("BlockPart");
     }
+
+
+    // constructor(block, partIndex) {
+    //     // let partWidth = block.width / totalParts;
+    //     let partWidth = block.width;
+    //
+    //     let x = block.pos.x + partIndex * partWidth;
+    //     super(x, block.pos.y, partWidth, block.height, block.color, block.shape);
+    //     this.block = block;
+    //     this.partIndex = partIndex;
+    //     this.rotation = block.rotation; // ブロックの角度を引き継ぐ
+    // }
 
     // ブロック部分を操作するためのメソッドをここに追加
 }
@@ -61,20 +69,25 @@ export default class BlockGrid extends Renderable {
     }
 
 
-    // ブロックをその部分に分割し、それらを別のBlockGridに追加する新しいメソッド
     splitBlocks(minParts, maxParts, targetGrid) {
         let parts = Math.floor(Math.random() * (maxParts - minParts + 1)) + minParts; // ブロックの分割数をランダムに選択
         let blockSize = Math.ceil(this.blocks.length / parts); // ブロックの配列を分割するサイズを計算
         let gap = 100; // ブロック間の間隔
+        let totalIndex = 0; // 全ブロックを通したインデックス
+        let currentPartIndex = 0; // 現在のパーツのインデックス
+
         for (let i = 0; i < parts; i++) {
             let blocksPart = this.blocks.slice(i * blockSize, (i + 1) * blockSize); // ブロックの配列を分割
             blocksPart.forEach((block, index) => {
-                let part = new BlockPart(block, index, blocksPart.length);
-                // splitGridの座標に基づいてBlockPartの座標を設定
-                part.pos.x = targetGrid.pos.x + index * (this.blockSize + gap); // ブロックとブロックの間に間隔を設定
-                part.pos.y = targetGrid.pos.y; // y座標は固定
+                // ブロックの間に間隔を設ける
+                let x = targetGrid.x_position + totalIndex * this.blockSize + currentPartIndex * gap;
+                let y = targetGrid.y_position;
+                let part = new BlockPart(x, y, block.width, block.height, block.color, block.shape, block.alpha, index, blocksPart.length);
+                part.rotation = block.rotation;
                 targetGrid.blocks.push(part);
+                totalIndex++; // 全体のインデックスを増やす
             });
+            currentPartIndex++; // 新しいパーツへ移行
         }
     }
 
