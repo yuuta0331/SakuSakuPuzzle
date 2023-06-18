@@ -1,7 +1,7 @@
 import {Renderable} from 'melonjs';
 import Block from "./block.js";
 
-class BlockPart extends Block {
+export class BlockPart extends Block {
     constructor(x, y, width, height, color, shape, alpha, partIndex, totalParts) {
         super(x, y, width, height, color, shape, alpha);
         this.partIndex = partIndex;

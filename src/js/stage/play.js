@@ -119,7 +119,7 @@ class PlayScreen extends Stage {
         let splitGrid = new BlockGrid(game.viewport.width / 2, game.viewport.height - 100, 90, 4, 4);
         this.sampleGrid.splitBlocks(2, 2, splitGrid); // ブロックを2部分に分割し、それらをsplitGridに追加
         game.world.addChild(splitGrid);
-
+        //console.log(splitGrid);
 
         // カーソルを描画
         this.cursor = new Cursor(game.viewport.width / 2, game.viewport.height / 2, splitGrid, centerGrid);

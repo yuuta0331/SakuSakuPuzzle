@@ -1,5 +1,6 @@
 import {game, event, input, Renderable, loader, Sprite, pool, device} from "melonjs";
 import {bindKeys, unbindKeys, bindGamepads, unbindGamepads} from "../util/constants";
+import {BlockPart} from "../renderables/block_grid";
 
 export default class Cursor extends Sprite {
     constructor(x, y, splitGrid, centerGrid) {
@@ -9,6 +10,17 @@ export default class Cursor extends Sprite {
             frameheight: 100
         };
         super(x, y, settings);
+
+        this.anchorPoint.set(1.0, 0.0); // アンカーポイントを中心に設定
+
+        // 押した瞬間・離した瞬間のキー入力フラグ
+        this.wasKeyPressed = false;
+
+        // 掴む・離すのキー入力フラグ
+        this.isGrabbing = false;
+
+        // ブロックを掴んでいるかどうかのフラグ
+        this.grabbingState = false;
 
         this.grabbedBlock = null; // 掴んでいるブロック
         this.centerGrid = centerGrid; // お手本ブロック
@@ -55,7 +67,7 @@ export default class Cursor extends Sprite {
         var x = event.gameScreenX;
         var y = event.gameScreenY;
         //console.log('pointerMove:', x, y); // マウスポインタの位置をログ出力
-    
+
         // カーソルの位置をマウスポインタの位置に設定
         this.pos.x = x;
         this.pos.y = y;
@@ -78,21 +90,33 @@ export default class Cursor extends Sprite {
         // });
 
         // ブロックが掴まれている場合、その位置をカーソルに追従させる
-        if (this.grabbedBlock) {
+        if (this.grabbedBlock && this.centerGrid) {
             this.grabbedBlock.pos.x = this.pos.x;
             this.grabbedBlock.pos.y = this.pos.y;
+            this.centerGrid.blocks.push(this.grabbedBlock);
+            this.updateBounds();
         }
 
-        // Aボタンが押されたときにブロックをつかむ
-        if (this.grabbedBlock === null && input.isKeyPressed('enter')) {
-            this.grabBlock();
+        let isKeyPressed = input.isKeyPressed('enter');
+
+        // Aボタンが押された瞬間に動作を切り替える
+        if (isKeyPressed && !this.wasKeyPressed) {
+            if (this.isGrabbing) {
+                // Aボタンが押されたときにブロックをドロップする
+                if (this.grabbedBlock !== null) {
+                    this.releaseBlock();
+                }
+            } else {
+                // Aボタンが押されたときにブロックをつかむ
+                if (this.grabbedBlock === null) {
+                    this.grabBlock();
+                }
+            }
+            this.isGrabbing = !this.isGrabbing;
         }
 
-        // Aボタンが離されたときにブロックをドロップする
-        if (this.grabbedBlock !== null && !input.isKeyPressed('enter')) {
-            //this.dropBlock();
-            this.releaseBlock();
-        }
+
+        this.wasKeyPressed = isKeyPressed;
 
         const moving = this.handleInput();
 
@@ -107,12 +131,17 @@ export default class Cursor extends Sprite {
 
     grabBlock() {
         // splitGrid からブロックをつかむ
-        if (!this.grabbedBlock) {
+        if (!this.grabbingState && !this.grabbedBlock) {
             let blockIndex = this.getBlockIndex(this.splitGrid);
             if (blockIndex !== -1) {
                 this.grabbedBlock = this.splitGrid.blocks.splice(blockIndex, 1)[0];
+                this.grabbingState = true;  // ステートを掴む状態に変更します。
             }
         }
+        // } else if (this.grabbingState && this.grabbedBlock) {
+        //     // 既にブロックを持っている状態でAボタンが押された場合は、ブロックを離します。
+        //     this.releaseBlock();
+        // }
     }
 
     releaseBlock() {
@@ -122,6 +151,7 @@ export default class Cursor extends Sprite {
             this.grabbedBlock.pos.y = this.pos.y;
             this.centerGrid.blocks.push(this.grabbedBlock);
             this.grabbedBlock = null;
+            this.grabbingState = false;  // ステートを離す状態に変更します。
         }
     }
 
