@@ -1,4 +1,4 @@
-import {Container, input, Renderable, UITextButton} from "melonjs";
+import {audio, Container, input, Renderable, timer, UITextButton} from "melonjs";
 
 class Keyboard extends Container {
     constructor(x, y) {
@@ -59,7 +59,7 @@ class KeyboardKey extends Renderable {
 }
 
 
-class KeyButton extends UITextButton {
+export class KeyButton extends UITextButton {
     constructor(x, y, character, keyboard) {
         let settings = {
             font: "funwari-round_white",
@@ -68,7 +68,8 @@ class KeyButton extends UITextButton {
             borderHeight: 80,
             textAlign: "center",
             textBaseline: "middle",
-            //backgroundColor: "#f5b1b1",
+            backgroundColor: "#f5b1b1",
+            hoverColor: "#e88c8c",
             //borderColor: "#000000",
         };
         super(x, y, settings);
@@ -80,32 +81,41 @@ class KeyButton extends UITextButton {
         //this.backgroundColor="#00aa0080"
     }
 
-    // onOver(/* event */) {
-    //     //this.setOpacity(1.0);
-    //     super.onOver()
-    // }
-    //
-    // /**
-    //  * function called when the pointer is leaving the object area
-    //  */
-    // onOut(/* event */) {
-    //     //this.setOpacity(0.5);
-    //     super.onOut()
-    // }
+    update(dt) {
+        // 描画が更新されない問題の対策
+        this.keyboard.toggleUppercase();
 
-    // onHold() {
-    //     super.onHold();
-    // }
+        if (input.isKeyPressed(this.character)) {
+            this.pressTime = timer.getTime();  // キーが押された時刻を記録
+            this.backgroundColor = "#00aa0080"
+            //this.isPressed = true;  // ボタンが押されているフラグを立てる
+        }
 
-    // onOver(event) {
-    //     this.backgroundColor = "#ffffff";
-    // }
-    //
-    // onOut(event) {
-    //     this.backgroundColor = "#000000";
-    // }
+        // キーが押されてから2秒経過したら、ボタンの色を元に戻す
+        if (timer.getTime() - this.pressTime > 600) {
+            this.backgroundColor = "#f5b1b1"
+            //this.isPressed = false;  // ボタンが押されているフラグを落とす
+        }
+
+        return super.update(dt);
+    }
+
+    onOver(/* event */) {
+        //this.setOpacity(1.0);
+        super.onOver()
+    }
+
+    /**
+     * function called when the pointer is leaving the object area
+     */
+    onOut(/* event */) {
+        //this.setOpacity(0.5);
+        super.onOut()
+    }
+
 
     onClick(event) {
+        audio.play("enter");
         // 大文字、小文字を切り替える
         let output = this.keyboard.isUppercase ? this.character.toUpperCase() : this.character;
         this.keyboard.parent.addCharacterToInput(output);
@@ -124,6 +134,8 @@ class ToggleButton extends UITextButton {
         let settings = {
             font: "funwari-round_white",
             text: "Aa",
+            backgroundColor: "#f5dab1",
+            hoverColor: "#ffc061",
             // image: "toggle_button_image", // ここにはボタンの画像を指定します
             // spritewidth: 64,
             // spriteheight: 64
@@ -135,9 +147,26 @@ class ToggleButton extends UITextButton {
     }
 
     onClick(event) {
+        audio.play("enter");
         // 大文字と小文字の切り替え
         this.keyboard.toggleUppercase();
         return true;
+    }
+
+    update(dt) {
+
+        if (input.isKeyPressed("shift")) {
+            // キーが押された時刻を記録
+            this.pressTime = timer.getTime();
+            this.backgroundColor = "#00aa0080"
+        }
+
+        // キーが押されてから2秒経過したら、ボタンの色を元に戻す
+        if (timer.getTime() - this.pressTime > 600) {
+            this.backgroundColor = "#f5dab1"
+        }
+
+        return super.update(dt);
     }
 }
 
@@ -147,9 +176,8 @@ class QwertyButton extends UITextButton {
             font: "funwari-round_white",
             text: "Qwerty",
             borderHeight: 80,
-            // image: "toggle_button_image", // ここにはボタンの画像を指定します
-            // spritewidth: 64,
-            // spriteheight: 64
+            backgroundColor: "#f5dab1",
+            hoverColor: "#ffc061",
         };
         super(x, y, settings);
         // MelonJSのバグでBitMapTextが0,0にも描画されるので、位置を修正する
@@ -161,6 +189,7 @@ class QwertyButton extends UITextButton {
     }
 
     onClick(event) {
+        audio.play("enter");
         this.keyboard.isQwerty = !this.keyboard.isQwerty;
         this.keyboard.setupKeyboard();
         return true;
@@ -180,9 +209,26 @@ class BackspaceButton extends UITextButton {
     }
 
     onClick(event) {
+        audio.play("return");
         // ユーザ入力から最後の文字を削除
         this.keyboard.parent.removeLastCharacterFromInput();
         return true;
+    }
+
+    update(dt) {
+
+        if (input.isKeyPressed('back')) {
+            // キーが押された時刻を記録
+            this.pressTime = timer.getTime();
+            this.backgroundColor = "#00ff00ff"
+        }
+
+        // キーが押されてから2秒経過したら、ボタンの色を元に戻す
+        if (timer.getTime() - this.pressTime > 600) {
+            this.backgroundColor = "#00aa0080"
+        }
+
+        return super.update(dt);
     }
 }
 
@@ -199,9 +245,26 @@ class ConfirmButton extends UITextButton {
     }
 
     onClick(event) {
+        audio.play("enter");
         // ユーザ入力を確定
         this.keyboard.parent.confirmUserInput();
         return true;
+    }
+
+    update(dt) {
+
+        if (input.isKeyPressed('enter')) {
+            // キーが押された時刻を記録
+            this.pressTime = timer.getTime();
+            this.backgroundColor = "#fff200"
+        }
+
+        // キーが押されてから2秒経過したら、ボタンの色を元に戻す
+        if (timer.getTime() - this.pressTime > 600) {
+            this.backgroundColor = "rgba(255,242,0,0.5)"
+        }
+
+        return super.update(dt);
     }
 }
 

@@ -88,6 +88,7 @@ class RankingScreen extends Stage {
     update(dt) {
         if (!this.isTransitioning && input.isKeyPressed("back")) {
             this.isTransitioning = true;
+            audio.play("return");
             state.change(state.MENU);
         }
         // else if (input.isKeyPressed("enter")) {

@@ -148,6 +148,7 @@ class RankingInputScreen extends Stage {
             if (input.isKeyPressed(char)) {
                 // 前回の入力から一定時間が経過していれば、入力を受け付ける
                 if (!this.lastInputTime[char] || Date.now() - this.lastInputTime[char] > delay) {
+                    audio.play("enter");
                     let output = this.isUppercase ? char.toUpperCase() : char;
                     this.userInput += output;
                     this.inputField.setText(this.userInput);
@@ -159,6 +160,7 @@ class RankingInputScreen extends Stage {
         // バックスペースキーが押されたら、最後の文字を削除する
         if (input.isKeyPressed('back')) {
             if (!this.lastInputTime['back'] || Date.now() - this.lastInputTime['back'] > delay) {
+                audio.play("return");
                 this.userInput = this.userInput.slice(0, -1);
                 this.inputField.setText(this.userInput);
                 this.lastInputTime['back'] = Date.now();
@@ -176,6 +178,7 @@ class RankingInputScreen extends Stage {
         // Enterキーが押されたら、入力を確定する
         if (input.isKeyPressed('enter')) {
             if (!this.lastInputTime['enter'] || Date.now() - this.lastInputTime['enter'] > delay) {
+                audio.play("enter");
                 console.log('Input confirmed:', this.userInput);
                 this.lastInputTime['enter'] = Date.now();
             }

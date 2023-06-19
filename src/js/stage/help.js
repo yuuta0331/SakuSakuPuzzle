@@ -107,6 +107,7 @@ export default class HelpScreen extends Stage {
             //バックスペースキーまたはゲームパッドのBボタンが押されたとき
             if (input.isKeyPressed("return")) {
                 state.change(state.MENU);
+                audio.play("return");
                 this.inputMargin = 0;
             }
             ;
