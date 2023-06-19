@@ -1,4 +1,4 @@
-import {BitmapText, Color, Container, game, input, Renderable, UITextButton} from "melonjs";
+import {Container, input, Renderable, UITextButton} from "melonjs";
 
 class Keyboard extends Container {
     constructor(x, y) {
@@ -70,32 +70,45 @@ class KeyButton extends UITextButton {
             textBaseline: "middle",
             //backgroundColor: "#f5b1b1",
             //borderColor: "#000000",
-            hidden: true
         };
         super(x, y, settings);
 
         this.character = character;
         this.keyboard = keyboard;
+        // BitmapTextの位置を調整
+        this.bitmapText.centerY = 30.0;
         //this.backgroundColor="#00aa0080"
     }
 
     // onOver(/* event */) {
-    //     this.setOpacity(1.0);
+    //     //this.setOpacity(1.0);
+    //     super.onOver()
     // }
     //
     // /**
     //  * function called when the pointer is leaving the object area
     //  */
     // onOut(/* event */) {
-    //     this.setOpacity(0.5);
+    //     //this.setOpacity(0.5);
+    //     super.onOut()
+    // }
+
+    // onHold() {
+    //     super.onHold();
+    // }
+
+    // onOver(event) {
+    //     this.backgroundColor = "#ffffff";
+    // }
+    //
+    // onOut(event) {
+    //     this.backgroundColor = "#000000";
     // }
 
     onClick(event) {
         // 大文字、小文字を切り替える
         let output = this.keyboard.isUppercase ? this.character.toUpperCase() : this.character;
         this.keyboard.parent.addCharacterToInput(output);
-        // ここにキーが押されたときの処理を書く
-        console.log('Key pressed: ' + output);
         return true;
     }
 
@@ -116,16 +129,14 @@ class ToggleButton extends UITextButton {
             // spriteheight: 64
         };
         super(x, y, settings);
+        // BitmapTextの位置を調整
+        this.bitmapText.centerY = 27.0;
         this.keyboard = keyboard;
     }
 
     onClick(event) {
         // 大文字と小文字の切り替え
-        this.keyboard.isUppercase = !this.keyboard.isUppercase;
-        //this.children.filter(child => child instanceof UITextButton).forEach(child => this.removeChildNow(child));
-        this.keyboard.children.filter(child => child instanceof KeyButton).forEach(KeyButton => KeyButton.updateCharacter());
-
-        console.log('Uppercase: ' + this.keyboard.isUppercase);
+        this.keyboard.toggleUppercase();
         return true;
     }
 }
@@ -135,6 +146,7 @@ class QwertyButton extends UITextButton {
         let settings = {
             font: "funwari-round_white",
             text: "Qwerty",
+            borderHeight: 80,
             // image: "toggle_button_image", // ここにはボタンの画像を指定します
             // spritewidth: 64,
             // spriteheight: 64
@@ -143,13 +155,14 @@ class QwertyButton extends UITextButton {
         // MelonJSのバグでBitMapTextが0,0にも描画されるので、位置を修正する
         //this.bitmapText = new BitmapText(x, y, settings);
         //this.bitmapText.pos.set(x, y);
+        // BitmapTextの位置を調整
+        this.bitmapText.centerY = 27.0;
         this.keyboard = keyboard;
     }
 
     onClick(event) {
         this.keyboard.isQwerty = !this.keyboard.isQwerty;
         this.keyboard.setupKeyboard();
-        console.log('Qwerty: ' + this.keyboard.isQwerty);
         return true;
     }
 }
@@ -161,6 +174,8 @@ class BackspaceButton extends UITextButton {
             text: "Back",
         };
         super(x, y, settings);
+        // BitmapTextの位置を調整
+        this.bitmapText.centerY = 27.0;
         this.keyboard = keyboard;
     }
 
@@ -178,6 +193,8 @@ class ConfirmButton extends UITextButton {
             text: "Enter",
         };
         super(x, y, settings);
+        // BitmapTextの位置を調整
+        this.bitmapText.centerY = 27.0;
         this.keyboard = keyboard;
     }
 
@@ -197,33 +214,13 @@ export default class VirtualKeyboard extends Container {
         this.parent = parent;
 
         // 大文字と小文字を切り替えるフラグ
-        this.isUppercase = false;
+        this.isUppercase = this.parent.isUppercase;
         this.isQwerty = false;
 
 
         this.alphabet = 'abcdefghijklmnopqrstuvwxyz';
         this.qwerty = 'qwertyuiopasdfghjklzxcvbnm';
         this.numbers = '0123456789';
-        // アルファベットのキーボタンを作成
-        // let alphabet = 'abcdefghijklmnopqrstuvwxyz';
-        // const qwerty = 'qwertyuiopasdfghjklzxcvbnm';
-        // const numbers = '0123456789';
-        // for(let i = 0; i < alphabet.length; i++) {
-        //     let character = alphabet[i];
-        //     game.world.addChild(new KeyButton(100 + (i * 70), 100, character));
-        // }
-
-
-        // // キーボードを作成
-        // this.keyboard = new KeyButton(0, 0);
-        // this.addChild(this.keyboard);
-        //
-        // // 大文字と小文字を切り替えるトグルボタンを作成
-        // this.toggleButton = new ToggleButton(0, 0);
-        // this.addChild(this.toggleButton);
-        //
-        // // キーボードの下にトグルボタンを配置
-        // this.toggleButton.pos.set(this.keyboard.width / 2 - this.toggleButton.width / 2, this.keyboard.height + 10);
     }
 
     // setupKeyboard = () => {
@@ -245,11 +242,7 @@ export default class VirtualKeyboard extends Container {
     // }
 
     onActivateEvent() {
-
-        // 切り替えボタンを作成
-        // game.world.addChild(new ToggleButton(this.pos.x + 100, this.pos.y + 400, this));
-        // game.world.addChild(new QwertyButton(this.pos.x + 300, this.pos.y + 400, this));
-
+        // キーボードを表示する
         this.setupKeyboard();
     }
 
@@ -288,7 +281,7 @@ export default class VirtualKeyboard extends Container {
 
         // Add number keys
         for (let i = 0; i < this.numbers.length; i++) {
-            this.addChild(new KeyButton(startX + ((totalWidth - this.numbers.length * keyWidth) / 2) + (i * keyWidth), startY + 0, this.numbers[i], this));
+            this.addChild(new KeyButton(startX + ((totalWidth - this.numbers.length * keyWidth) / 2) + (i * keyWidth), startY, this.numbers[i], this));
         }
 
         // Add letter keys
@@ -309,4 +302,11 @@ export default class VirtualKeyboard extends Container {
         this.addChild(new ConfirmButton(startX + totalWidth - buttonWidth, startY + totalHeight + 2 * buttonHeight, this));
     }
 
+
+    // 大文字と小文字を切り替える
+    toggleUppercase() {
+        this.parent.isUppercase = !this.parent.isUppercase;
+        this.isUppercase = this.parent.isUppercase;
+        this.children.filter(child => child instanceof KeyButton).forEach(KeyButton => KeyButton.updateCharacter());
+    }
 }

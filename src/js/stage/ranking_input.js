@@ -43,6 +43,8 @@ class RankingInputScreen extends Stage {
         // キー入力の最後の入力時間を記録するための変数
         this.lastInputTime = {};
 
+        this.isUppercase = false;
+
         // add a gray background to the default Stage
         game.world.addChild(new ColorLayer("background", "#F8E860"), 1);
 
@@ -70,6 +72,7 @@ class RankingInputScreen extends Stage {
         input.bindKey(input.KEY.ENTER, "enter");
         input.bindKey(input.KEY.BACKSPACE, "back");
         input.bindKey(input.KEY.B, "back");
+        input.bindKey(input.KEY.SHIFT, "shift");
 
         // ゲームパッドのボタンをキーボードのキーにマッピング
         input.bindGamepad(0, {type: "buttons", code: input.GAMEPAD.BUTTONS.FACE_1}, input.KEY.ENTER);
@@ -95,8 +98,8 @@ class RankingInputScreen extends Stage {
         for (let i = 65; i <= 90; i++) {  // ASCII values for A-Z
             input.bindKey(i, String.fromCharCode(i).toLowerCase());
         }
-
-        game.world.addChild(new VirtualKeyboard(game.viewport.width / 2, game.viewport.height * 0.5, this), 3);
+        this.virtualKeyboard = new VirtualKeyboard(game.viewport.width / 2, game.viewport.height * 0.5, this);
+        game.world.addChild(this.virtualKeyboard, 3);
     }
 
     // KeyButtonから呼ばれるメソッド
@@ -145,7 +148,8 @@ class RankingInputScreen extends Stage {
             if (input.isKeyPressed(char)) {
                 // 前回の入力から一定時間が経過していれば、入力を受け付ける
                 if (!this.lastInputTime[char] || Date.now() - this.lastInputTime[char] > delay) {
-                    this.userInput += char;
+                    let output = this.isUppercase ? char.toUpperCase() : char;
+                    this.userInput += output;
                     this.inputField.setText(this.userInput);
                     this.lastInputTime[char] = Date.now();
                 }
@@ -158,6 +162,14 @@ class RankingInputScreen extends Stage {
                 this.userInput = this.userInput.slice(0, -1);
                 this.inputField.setText(this.userInput);
                 this.lastInputTime['back'] = Date.now();
+            }
+        }
+
+        if (input.isKeyPressed('shift')) {
+            if (!this.lastInputTime['shift'] || Date.now() - this.lastInputTime['shift'] > delay) {
+                //this.virtualKeyboard.isUppercase = !this.virtualKeyboard.isUppercase;
+                this.virtualKeyboard.toggleUppercase();
+                this.lastInputTime['shift'] = Date.now();
             }
         }
 
