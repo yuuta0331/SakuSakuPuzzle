@@ -10,6 +10,7 @@ import {
     Renderable, Text
 } from "melonjs";
 import g_game from "../../game";
+import VirtualKeyboard from "../entities/keyboard";
 
 class DebugRect extends Renderable {
     constructor(x, y, w, h) {
@@ -94,7 +95,27 @@ class RankingInputScreen extends Stage {
         for (let i = 65; i <= 90; i++) {  // ASCII values for A-Z
             input.bindKey(i, String.fromCharCode(i).toLowerCase());
         }
+
+        game.world.addChild(new VirtualKeyboard(game.viewport.width / 2, game.viewport.height * 0.5, this), 3);
     }
+
+    // KeyButtonから呼ばれるメソッド
+    addCharacterToInput(char) {
+        this.userInput += char;
+        this.inputField.setText(this.userInput);
+    }
+
+    removeLastCharacterFromInput() {
+        this.userInput = this.userInput.slice(0, -1);
+        this.inputField.setText(this.userInput);
+    }
+
+    confirmUserInput() {
+        this.isTransitioning = true;
+        this.submitScore(this.userInput, g_game.data.score);
+        state.change(state.USER);
+    }
+
 
     onDestroyEvent() {
 
@@ -147,7 +168,8 @@ class RankingInputScreen extends Stage {
                 this.lastInputTime['enter'] = Date.now();
             }
         }
-        console.log(this.userInput);
+        // 入力をコンソールに表示
+        //console.log(this.userInput);
 
         if (!this.isTransitioning && input.isKeyPressed("enter")) {
             this.isTransitioning = true;
