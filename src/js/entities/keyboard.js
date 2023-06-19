@@ -99,6 +99,10 @@ class KeyButton extends UITextButton {
         return true;
     }
 
+    updateCharacter() {
+        let newCharacter = this.keyboard.isUppercase ? this.character.toUpperCase() : this.character;
+        this.bitmapText.setText(newCharacter);
+    }
 
 }
 
@@ -112,13 +116,16 @@ class ToggleButton extends UITextButton {
             // spriteheight: 64
         };
         super(x, y, settings);
-        this.keyborad = keyboard;
+        this.keyboard = keyboard;
     }
 
     onClick(event) {
         // 大文字と小文字の切り替え
-        this.keyborad.isUppercase = !this.keyborad.isUppercase;
-        console.log('Uppercase: ' + this.keyborad.isUppercase);
+        this.keyboard.isUppercase = !this.keyboard.isUppercase;
+        //this.children.filter(child => child instanceof UITextButton).forEach(child => this.removeChildNow(child));
+        this.keyboard.children.filter(child => child instanceof KeyButton).forEach(KeyButton => KeyButton.updateCharacter());
+
+        console.log('Uppercase: ' + this.keyboard.isUppercase);
         return true;
     }
 }
@@ -136,13 +143,13 @@ class QwertyButton extends UITextButton {
         // MelonJSのバグでBitMapTextが0,0にも描画されるので、位置を修正する
         //this.bitmapText = new BitmapText(x, y, settings);
         //this.bitmapText.pos.set(x, y);
-        this.keyborad = keyboard;
+        this.keyboard = keyboard;
     }
 
     onClick(event) {
-        this.keyborad.isQwerty = !this.keyborad.isQwerty;
-        this.keyborad.setupKeyboard();
-        console.log('Qwerty: ' + this.keyborad.isQwerty);
+        this.keyboard.isQwerty = !this.keyboard.isQwerty;
+        this.keyboard.setupKeyboard();
+        console.log('Qwerty: ' + this.keyboard.isQwerty);
         return true;
     }
 }
@@ -255,37 +262,51 @@ export default class VirtualKeyboard extends Container {
 
         let keyWidth = 100;
         let keyHeight = 100;
-        let totalWidth = Math.max(this.numbers.length, keys.length / 2) * keyWidth;
+
+        // Create a separate array for each row of keys
+        const rows = this.isQwerty ? [
+            this.qwerty.slice(0, 10),  // Numbers
+            this.qwerty.slice(10, 19), // Q to P
+            this.qwerty.slice(19, 28), // A to L
+            this.qwerty.slice(28)      // Z to M
+        ] : [
+            this.alphabet.slice(0, this.alphabet.length / 2),
+            this.alphabet.slice(this.alphabet.length / 2),
+        ];
+
+        let totalWidth = Math.max(...rows.map(row => row.length)) * keyWidth;
+        //let totalHeight = (rows.length + this.isQwerty ? 3 : 3) * keyHeight;
+        //let totalHeight = (this.isQwerty ? 3 : 2) * keyHeight;
         let totalHeight = 3 * keyHeight;
 
         let startX = this.pos.x - totalWidth / 2;
         let startY = this.pos.y - totalHeight / 2;
+// If Qwerty layout is active, move the startY up to accommodate the additional row
+//         if (this.isQwerty) {
+//             startY += keyHeight;
+//         }
 
+        // Add number keys
         for (let i = 0; i < this.numbers.length; i++) {
-            this.addChild(new KeyButton(startX + (i * keyWidth), startY + 0, this.numbers[i], this));
-        }
-        for (let i = 0; i < 13; i++) {
-            this.addChild(new KeyButton(startX + (i * keyWidth), startY + keyHeight, keys[i], this));
-        }
-        for (let i = 13; i < keys.length; i++) {
-            this.addChild(new KeyButton(startX + ((i - 13) * keyWidth), startY + 2 * keyHeight, keys[i], this));
+            this.addChild(new KeyButton(startX + ((totalWidth - this.numbers.length * keyWidth) / 2) + (i * keyWidth), startY + 0, this.numbers[i], this));
         }
 
-        // Adjust toggle and qwerty button position
+        // Add letter keys
+        for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+            let row = rows[rowIndex];
+            let rowStartX = startX + ((totalWidth - row.length * keyWidth) / 2);
+            for (let i = 0; i < row.length; i++) {
+                this.addChild(new KeyButton(rowStartX + (i * keyWidth), startY + ((rowIndex + 1) * keyHeight), row[i], this));
+            }
+        }
+
+        // Add control buttons
         let buttonWidth = 200;
         let buttonHeight = 100;
-
-        // let toggleButton = this.children.find(child => child instanceof ToggleButton);
-        // toggleButton.pos.set(startX, startY + totalHeight + buttonHeight);
-        //
-        // let qwertyButton = this.children.find(child => child instanceof QwertyButton);
-        // qwertyButton.pos.set(startX + totalWidth - buttonWidth, startY + totalHeight + buttonHeight);
-
         this.addChild(new ToggleButton(startX, startY + totalHeight + buttonHeight, this));
         this.addChild(new QwertyButton(startX + buttonWidth, startY + totalHeight + buttonHeight, this));
-        this.addChild(new BackspaceButton(startX + totalWidth - keyWidth, startY + totalHeight + buttonHeight, this));
-        this.addChild(new ConfirmButton(startX + totalWidth - keyWidth, startY + totalHeight + 2 * buttonHeight, this));
-
+        this.addChild(new BackspaceButton(startX + totalWidth - buttonWidth, startY + totalHeight + buttonHeight, this));
+        this.addChild(new ConfirmButton(startX + totalWidth - buttonWidth, startY + totalHeight + 2 * buttonHeight, this));
     }
 
 }
