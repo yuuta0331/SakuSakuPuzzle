@@ -203,7 +203,9 @@ class RankingInputScreen extends Stage {
         //     state.change(state.MENU);
         // }
 
+        // 描画が更新されない問題の対策
 
+        game.repaint();
         let delay = 200;  // キー入力の遅延時間（ミリ秒）
 
         // AからZまでのキーが押されたら、その文字を入力フィールドに追加

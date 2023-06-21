@@ -128,7 +128,8 @@ export class KeyButton extends UITextButton {
 
     update(dt) {
         // 描画が更新されない問題の対策
-        this.keyboard.toggleUppercase();
+        //this.keyboard.toggleUppercase();
+
         // if (this.keyboard.charset === VirtualKeyboard.CHARSET.KATAKANA ||
         //     this.keyboard.charset === VirtualKeyboard.CHARSET.HIRAGANA) {
         //     this.pressTime = timer.getTime();
@@ -150,8 +151,8 @@ export class KeyButton extends UITextButton {
         }
 
         // 現在時刻に対してsin関数を適用し、0から1の範囲で周期的に変化する値を作る
-        var amt = (Math.sin(timer.getTime() / 1000) + 1) / 2;  // 0から1の範囲で変化
-        this.backgroundColor = lerpColor("#fd21b1", "#ff6161", amt);
+        // var amt = (Math.sin(timer.getTime() / 1000) + 1) / 2;  // 0から1の範囲で変化
+        // this.backgroundColor = lerpColor("#fd21b1", "#ff6161", amt);
 
         return super.update(dt);
     }
