@@ -8,7 +8,6 @@ import {
     plugin,
     pool,
     TextureAtlas,
-    plugins,
     game, input
     ,event
 } from 'melonjs';
@@ -122,8 +121,8 @@ device.onReady(() => {
         });
 
         // Start the game.
+        // state.change(state.SCORE);
         state.change(state.MENU);
-        //state.change(state.PLAY);
 
         // display if debugPanel is enabled or on mobile
         // モバイルデバイスでのみ疑似コントローラーを表示

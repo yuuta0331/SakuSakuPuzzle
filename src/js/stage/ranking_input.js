@@ -4,9 +4,7 @@ import {
     input,
     Stage,
     ColorLayer,
-    BitmapText,
     state,
-    Container,
     Renderable, Text
 } from "melonjs";
 import g_game from "../../game";
@@ -208,26 +206,6 @@ class RankingInputScreen extends Stage {
         game.repaint();
         let delay = 200;  // キー入力の遅延時間（ミリ秒）
 
-        // AからZまでのキーが押されたら、その文字を入力フィールドに追加
-        // A-Zのキーと0-9のキーに対応
-        // for (let i = 48; i <= 90; i++) {
-        //     // 数字のASCII範囲(58-64)は除外
-        //     if (i > 57 && i < 65) continue;
-        //
-        //     let char = String.fromCharCode(i).toLowerCase();
-        //     if (input.isKeyPressed(char)) {
-        //         // 前回の入力から一定時間が経過していれば、入力を受け付ける
-        //         if (!this.lastInputTime[char] || Date.now() - this.lastInputTime[char] > delay) {
-        //             audio.play("enter");
-        //             // 数字か小文字のアルファベットの場合はそのまま、大文字のアルファベットの場合はisUppercaseに基づいて変換
-        //             let output = (i >= 65 && this.isUppercase) ? char.toUpperCase() : char;
-        //             this.userInput += output;
-        //             this.inputField.setText(this.userInput);
-        //             this.lastInputTime[char] = Date.now();
-        //         }
-        //     }
-        // }
-
         // 常に中央揃えになるように更新
         this.inputField.autoTransform = true;
         this.inputField.updateTransform = function () {
@@ -310,6 +288,6 @@ class RankingInputScreen extends Stage {
         });
     }
 
-};
+}
 
 export default RankingInputScreen;

@@ -10,6 +10,10 @@ const DataManifest = [
 
     /* SE */
     {name: "cursor_move", type: "audio", src: "./data/sfx/"},
+    {name: "releaseBlock", type: "audio", src: "./data/sfx/"},
+    {name: "grabBlock", type: "audio", src: "./data/sfx/"},
+    {name: "rotation", type: "audio", src: "./data/sfx/"},
+    {name: "NextLevel", type: "audio", src: "./data/sfx/"},
     {name: "enter", type: "audio", src: "./data/sfx/"},
     {name: "return", type: "audio", src: "./data/sfx/"},
 

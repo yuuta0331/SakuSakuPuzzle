@@ -1,4 +1,4 @@
-import {game, audio, input, Stage, ColorLayer, BitmapText, Sprite, loader, state, ImageLayer} from "melonjs";
+import {game, audio, input, Stage, ColorLayer, loader, state, ImageLayer} from "melonjs";
 
 export default class HelpScreen extends Stage {
     /**
@@ -37,15 +37,6 @@ export default class HelpScreen extends Stage {
             z: 1 // z-index
         });
         game.world.addChild(this.backgroundLayer);
-
-        // add a font text display object
-        // game.world.addChild(new BitmapText(game.viewport.width / 2, game.viewport.height / 2, {
-        //     font: "PressStart2P",
-        //     size: 4.0,
-        //     textBaseline: "middle",
-        //     textAlign: "center",
-        //     text: "Help"
-        // }));
 
         // キーボードのイベントをアクションとしてバインド
         input.bindKey(input.KEY.LEFT, "left");
@@ -88,14 +79,14 @@ export default class HelpScreen extends Stage {
                 this.ChangeImage();
                 this.inputMargin = 0;
             }
-            ;
+
 
             if (input.isKeyPressed("right")) {
                 this.selectedItemIndex = (this.selectedItemIndex + 1) % 2;
                 this.ChangeImage();
                 this.inputMargin = 0;
             }
-            ;
+
 
             //エンターキーまたはゲームパッドのAボタンが押されたとき
             if (input.isKeyPressed("enter")) {
@@ -103,14 +94,14 @@ export default class HelpScreen extends Stage {
                 this.ChangeImage();
                 this.inputMargin = 0;
             }
-            ;
+
             //バックスペースキーまたはゲームパッドのBボタンが押されたとき
             if (input.isKeyPressed("return")) {
                 state.change(state.MENU);
                 audio.play("return");
                 this.inputMargin = 0;
             }
-            ;
+
         }
     }
 

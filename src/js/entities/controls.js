@@ -1,6 +1,6 @@
 
 //import game from '../game.js';
-import {game, event, input, Sprite, UISpriteElement, Vector2d, Container, loader, TextureAtlas} from "melonjs";
+import {game, event, input, Sprite, UISpriteElement, Vector2d, Container} from "melonjs";
 import g_game from '../../game.js';
 
 /**
@@ -37,7 +37,7 @@ class Button extends UISpriteElement {
         input.triggerKeyEvent(input.KEY.SPACE, false);
         return false;
     }
-};
+}
 
 class BButton extends UISpriteElement {
     constructor(x, y) {
@@ -60,7 +60,7 @@ class BButton extends UISpriteElement {
         input.triggerKeyEvent(input.KEY.B, false); // Change this to the key you want
         return false;
     }
-};
+}
 
 
 /**
@@ -241,7 +241,7 @@ class Joypad extends UISpriteElement {
         this.pad.pos.setV(this.pos).add(this.relative).add(this.joypad_offset);
         this.pad.draw(renderer);
     }
-};
+}
 
 /**
  * a very simple virtual joypad and buttons, that triggers
@@ -271,6 +271,8 @@ class VirtualJoypad extends Container {
             50,
             game.viewport.height - 200
         );
+        // 疑似ジョイパッドのスケールを変更
+        // this.joypad.scale(1.0);
 
         // instance of the button
         this.button = new Button(
@@ -307,6 +309,6 @@ class VirtualJoypad extends Container {
             }
         );
     }
-};
+}
 
 export default VirtualJoypad;

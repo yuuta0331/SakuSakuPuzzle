@@ -129,6 +129,7 @@ export function bindKeys() {
 	input.bindKey(input.KEY.ENTER, "enter");
 	input.bindKey(input.KEY.ESC, "exit", true);
 	input.bindKey(input.KEY.F, "fullscreen", true);
+	input.bindKey(input.KEY.E, "rotation", true);
 
 	// マウスの左クリックをスペースキーを押した時と同様に
 	//input.bindPointer(0, 32);
@@ -154,6 +155,7 @@ export function unbindKeys() {
 	input.unbindKey(input.KEY.ENTER);
 	input.unbindKey(input.KEY.ESC);
 	input.unbindKey(input.KEY.F);
+	input.unbindKey(input.KEY.E);
 
 }
 
@@ -166,6 +168,7 @@ export function bindGamepads() {
 	input.bindGamepad(0, {type: "buttons", code: input.GAMEPAD.BUTTONS.DOWN}, input.KEY.DOWN);
 	input.bindGamepad(0, {type: "buttons", code: input.GAMEPAD.BUTTONS.LEFT}, input.KEY.LEFT);
 	input.bindGamepad(0, {type: "buttons", code: input.GAMEPAD.BUTTONS.FACE_1}, input.KEY.ENTER);
+	input.bindGamepad(0, {type: "buttons", code: input.GAMEPAD.BUTTONS.FACE_3}, input.KEY.E);
 	input.bindGamepad(0, {type: "axes", code: input.GAMEPAD.AXES.LY, threshold: -0.1}, input.KEY.UP);
 	input.bindGamepad(0, {type: "axes", code: input.GAMEPAD.AXES.LX, threshold: 0.1}, input.KEY.RIGHT);
 	input.bindGamepad(0, {type: "axes", code: input.GAMEPAD.AXES.LY, threshold: 0.1}, input.KEY.DOWN);
@@ -179,6 +182,7 @@ export function unbindGamepads() {
 	input.unbindGamepad(0, input.GAMEPAD.BUTTONS.DOWN);
 	input.unbindGamepad(0, input.GAMEPAD.BUTTONS.LEFT);
 	input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_1);
+	input.unbindGamepad(0, input.GAMEPAD.BUTTONS.FACE_3);
 	input.unbindGamepad(0, input.GAMEPAD.AXES.LX);
 	input.unbindGamepad(0, input.GAMEPAD.AXES.LY);
 }

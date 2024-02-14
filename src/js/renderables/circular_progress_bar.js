@@ -19,7 +19,7 @@ export default class CircularProgressBar extends Renderable {
         this.progress = 0;
 
         // ビットマップテキストの作成
-        this.bitmapText = new BitmapText(0, 0, {
+        this.bitmapText = new BitmapText(280, 640, {
             font: "funwari-round_brown",
             size: 1.0,
             textBaseline: "middle",
@@ -28,7 +28,7 @@ export default class CircularProgressBar extends Renderable {
             text: "",
             lineWidth: 1.
         });
-        game.world.addChild(this.bitmapText);
+        game.world.addChild(this.bitmapText, 5);
     }
 
     update(dt) {
@@ -60,6 +60,6 @@ export default class CircularProgressBar extends Renderable {
 
         // ビットマップテキストを更新して円の中心に描画
         this.bitmapText.setText(text);
-        this.bitmapText.pos.set(this.width / 2 + 180, this.height / 2 + 540);
+        // this.bitmapText.pos.set(this.width / 2 + 180, this.height / 2 + 540);
     }
 }
